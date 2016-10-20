@@ -8,4 +8,8 @@ Reports to be added to this at some point.
 # Running the App
 Download all files, and open the index.html file in a modern browser (firefox, chrome, Edge).  
 
-It should be fairly self explanitory from there.
+It should be fairly self explanatory from there.
+
+Please note there are a number of things that are not working at this stage.
+
+Inputing points into the chart works... And thats about it.

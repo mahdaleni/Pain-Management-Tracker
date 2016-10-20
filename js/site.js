@@ -243,7 +243,7 @@ function start_main_page(){
     //check for existing points (defaults to last 24 hours.
     
     var exPoints = get_points();
-    $.each(exPoints,function(i,p){main_place_dot(p.position_x,p.position_y)});
+    $.each(exPoints,function(i,p){main_place_dot(p.position_x,p.position_y,"dot_id_"+i)});
 
 }
 
