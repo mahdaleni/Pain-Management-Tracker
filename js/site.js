@@ -243,7 +243,7 @@ function start_main_page(){
     //check for existing points (defaults to last 24 hours.
     
     var exPoints = get_points();
-    $.each(exPoints,function(i,p){main_place_dot(p.position_x,p.position_y,"dot_id_"+i)});
+    $.each(exPoints,function(i,p){main_place_dot(p.position_x,p.position_y,"dot_id_"+i,p)});
 
 }
 
@@ -265,6 +265,17 @@ function main_point_save_data(){
     
 }
 
+
+//Edit a point when clicked
+function main_point_click(pid){
+    main_point_edit(pid);
+}
+
+function main_point_edit(div_id){
+    //Loads the point in the div into the edit window.
+    
+    
+}
 function main_click_img_add_dot(thisCx, e){
     
         //Check for existing marker, if it does, remove it (only should have one new marker
@@ -297,7 +308,9 @@ function main_place_dot(pos_pc_x,pox_pc_y,id,pData){
     
         var imgX = $("#main_img_body_outline").width();
         var imgY = $("#main_img_body_outline").height();
-        if(id===undefined)id="newMarker";
+        if(id===undefined){
+            id="newMarker";
+        }
         
         var div = $("<div />");
         div.attr("id", id);
@@ -318,11 +331,53 @@ function main_place_dot(pos_pc_x,pox_pc_y,id,pData){
         context.globalAlpha = 0.5;
         context.beginPath();
         context.arc(6,6, 6, 0, 2 * Math.PI, false);
-        context.fillStyle = 'red';
+        
+        
+        if(pData!==undefined && id!=="newMarker"){
+            
+            //prepare friendly date for showing on popup
+            var timeFriendlyStart = get_time_string(pData.time_start, pData.time_end);
+            
+            //Popup Data
+            div.attr("data-toggle", 'popover');
+            div.attr("title", pData.pain_location + " pain"); 
+            div.attr("data-html", 'true'); 
+            div.attr("data-content", timeFriendlyStart + "<br>" +  pData.notes); 
+            div.attr("onclick","main_point_click('#"+id+"')");
+            //Add the popover for the dot
+            
+            switch (pData.pain_location.toLowerCase()){
+                case "joint":
+                  context.fillStyle = '#F00000';
+                break;
+                case "muscle":
+                  context.fillStyle = '#F000F0';
+                break;
+                case "skin":
+                  context.fillStyle = '#F0F000';
+                break;
+                case "other":
+                  context.fillStyle = '#404040';
+                break;
+                default:
+                    context.fillStyle = '#b08040';
+                break;
+            }
+        }
+        else{
+            
+            context.fillStyle = 'red';
+        }
         context.fill();
         
          div.append(canvas);
         $("#page_content").append(div);
+        
+        //now that the new div is in the active DOM, check and add hover listener
+        if(pData!==undefined && id!=="newMarker"){
+            
+            $('#'+id).popover({trigger:'hover'});
+        }
         
 }
 
@@ -350,6 +405,39 @@ function main_time_select(time){
     
     main_set_time_fields(startTime,endTime);
     
+}
+
+function get_time_string(strTimeStart, strTimeEnd){
+    var timeFriendlyStart = get_time_offset_string(new Date(strTimeStart).getTime());
+    var timeDuration = get_time_offset_string(new Date().getTime() - (new Date(strTimeEnd).getTime()-new Date(strTimeStart).getTime()));
+    var timeFriendlyEnd = get_time_offset_string(strTimeEnd);
+    
+    //Math.floor((new Date().getTime() - new Date(time).getTime())
+    
+    return timeFriendlyStart + " ago : Duration = " + timeDuration;
+}
+
+
+function get_time_offset_string(timestamp){
+    var timeSeconds = Math.floor((new Date().getTime() - timestamp) /1000);
+    var friendlyTime = "";
+    if(timeSeconds < 61){
+        var friendlyTime = timeSeconds + "s"; 
+    }
+    else if(timeSeconds < 3600){
+        var friendlyTime = Math.floor(timeSeconds/60) + "m"; 
+    }
+    else if(timeSeconds < 86400){        //24 Hours
+        var friendlyTime = Math.floor(timeSeconds/60/60) +"h " + Math.floor((timeSeconds/60)%60) + "m"; 
+    }
+    else if(timeSeconds < 604800){        //7 days
+        var friendlyTime = Math.floor(timeSeconds/24/60/60) +"d " + Math.floor((timeSeconds%24%60)/60) + "h"; 
+    }
+    else if(timeSeconds > 604800){        //7 days
+        var friendlyTime = Math.floor(timeSeconds/7/24/60/60) +"w " + Math.floor(timeSeconds/60/60/24%7) + "d"; 
+    }
+    
+    return friendlyTime;
 }
 
 function main_set_time_fields(startTimeStamp, endTimeStamp){
