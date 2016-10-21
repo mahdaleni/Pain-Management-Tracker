@@ -119,7 +119,7 @@ function start_front_page(){
         $.each(users,function(i,u){
            $("#front_existing_users ul").append('<li><a href="#" onclick="select_user(\''+u.name+'\')">'+u.name+'</a></li>'); 
         });
-        console.log("found users");
+        //console.log("found users");
     }else{
        $("#front_existing_users").append('<p><strong>No Users Found!</strong></p>'); 
        console.log("no users found");
@@ -138,39 +138,14 @@ function get_user(user){
 
 function add_user(){
     var addUserResult = db_local_add_user($("#front_input_name").val());
-    if(addUserResult===true){
-        change_page_content('frontpage');
+    if(addUserResult==="true"){
+        start_front_page();
     }
     else{
-         alert_modal("Error", addUserResult);
+        
+         alert_modal("Error", $("#front_input_name").val() + " - " + addUserResult);
           
     }
-    
-    
-}
-
-function save_users(){
-    var usersToAdd = [];
-    var users = get_users();
-    if(users===null)users=[];
-    
-    $.each($("#front_existing_users ul li a"),function(i,d){
-        var userExists = false;
-        $.each(users,function(ui,u){
-            if(u.name===$(d).html()){
-                userExists = true;
-            }
-        });
-        if(!userExists){
-            users.push({
-                name:$(d).html()
-            });
-        }
-    });
-    
-    
-    // Put the object into storage
-    localStorage.setItem('users', JSON.stringify(users));
     
     
 }
@@ -188,10 +163,10 @@ function get_points(timeframe){
 function get_current_user(){
     return db_local_get_current_user();
 }
-
-function add_user(user){
-    db_local_add_user(user);
-}
+//
+//function add_user(user){
+//    db_local_add_user(user);
+//}
 
 //returns an array of point data for the PID, or undefined if nothing set.
 function get_point_data(pid){
@@ -552,20 +527,32 @@ function db_local_add_user(user){
     if(user.length > 3){
         //check if this user is already in the system
         var users = get_users();
+        
+        if(users===null)users=[];
+        
         var userExists = false;
         $.each(users,function(i,u){
-            if(u.name===thisUser)userExists = true;
+            if(u.name.toLowerCase()===user.toLowerCase())userExists = true;
+            
         });
-        if(userExists){
-            alert_modal("Error : Name alerady exists", "<p>This name already exists in your local database, please select it from the 'Existing Users' section.</p>");
+        if(userExists===true){
+            return "<p>This name already exists in your local database, please select it from the 'Existing Users' section.</p>";
           
         }else{
-              $("#front_existing_users ul").append('<li><a href="#" onclick="select_user(\''+thisUser+'\')">'+thisUser+'</a></li>'); 
-              save_users();
+
+            users.push({
+                name:user
+            });
+
+
+            // Put the object into storage
+            localStorage.setItem('users', JSON.stringify(users));
+    
+            return "true"; 
         }
       
     }else{
-            return("<p>The name must be <strong>at least 4 characters long</strong> to be added.</p>");
+         return "<p>The name must be <strong>at least 4 characters long</strong> to be added.</p>";
           
     }
 }
