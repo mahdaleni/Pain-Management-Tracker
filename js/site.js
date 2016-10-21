@@ -187,7 +187,7 @@ function get_current_user(){
 
 //returns an array of point data for the PID, or undefined if nothing set.
 function get_point_data(pid){
-    
+    return db_local_get_point(pid);
 }
 
 function save_point(point){
@@ -214,16 +214,28 @@ function start_main_page(){
 
 function main_point_save_data(){
     //get the form data
-    var id = new Date().getTime();
-    var formData = {id:id};
+    var timeId = new Date().getTime();
+    var formData = {};
     $.each($("#alert_modal_wrap").find("form").serializeArray(),function(i,d){
         formData[d.name]=d.value;
     });
     //add the location as percentages
+    //if ID is new
+    if(formData['id']==='new' || formData['id']===undefined){
+        formData['id']=timeId;
+    }
+    
     
     save_point(formData);
     $("#alert_modal_wrap").modal('hide');
-    $("#newMarker").attr('id',"point_"+id);
+    
+    //Remove the new marker point, and any points with this ID & re-add it
+    
+    
+    $("#newMarker").remove();
+    $("#"+formData['id']).remove();
+    main_place_dot(formData['position_x'],formData['position_y'],"dot_id_"+formData['id'],formData);
+//    $("#newMarker").attr('id',"dot_id_"+formData['id']);
     
 }
 
@@ -238,8 +250,14 @@ function main_point_edit(point_id){
     //First, load the modal
     
     load_modal("Pain Details", "page_wrap_main_modal_data");
-    
+    var pid = point_id.substring(8);
     //get the point values
+    var pointDat = get_point_data(pid);
+    $.each(pointDat,function(k,v){
+        $("#alert_modal_wrap").find("#"+k).val(v);
+    });
+    console.log(pointDat);
+    
     
     
 }
@@ -488,31 +506,45 @@ var pages = {
     
 function db_local_get_points(timeframe){
     
-    //if no timeframe is specified, set the time frame to the last 24 hours (in minutes)
-    if(timeframe===undefined)timeframe=1440;
-    //Update the timeframe to be the start of the time frame to this point.
-    timeframe = new Date().getTime() - (timeframe * 60 * 1000);
-    
+   
     var thisUser =  JSON.parse(localStorage.getItem("user"));
     
     var points = JSON.parse(localStorage.getItem(thisUser.name + "_points"));
     if (points===null)return {};
+ 
+    //if no timeframe is specified, set the time frame to the last 24 hours (in minutes)
+    else if(timeframe===undefined)return points;
     else {
+         //Update the timeframe to be the start of the time frame to this point.
+        timeframe = new Date().getTime() - (timeframe * 60 * 1000);
+    
+        
         //Filter for time frame
         var filteredPoints = {};
         $.each(points, function(i,p){
             if(i>timeframe)filteredPoints[i]=p;
         });
-            
-        
-        
-        return points;
+        return filteredPoints;
     }
+}
+
+function db_local_get_point(pid){
+    var allPoints = db_local_get_points();
+    var foundP = undefined;
+    $.each(allPoints,function(i,p){
+        if(i===pid){
+            foundP = p;
+            return false;   //Break the for each loop
+        }
+    });
+    
+    return foundP;
+    
 }
 
 
 function db_local_save_point(point){
-    
+    //this function adds/edits points into the local database
     var existingPoints = get_points();
     
     var cUser = JSON.parse(localStorage.getItem("user"));
