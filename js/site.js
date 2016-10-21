@@ -142,9 +142,11 @@ function delete_user_current(){
     
     var cUser = get_current_user();
     if(cUser!== null && cUser.name !== undefined){
-         console.log('removing user ' +cUser.name+" & all their data" );
+        console.log('removing user ' +cUser.name+" & all their data" );
         db_local_remove_user(cUser.name);
-        loadPage('frontpage');
+        
+        localStorage.removeItem('user');
+        loadPage('front');
     }else{
         console.log("could not select user to delete : "+cUser)
     }
