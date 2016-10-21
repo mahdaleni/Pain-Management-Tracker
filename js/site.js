@@ -62,7 +62,7 @@ function loadPage(pagename){
         
       
     }else{
-        alert("could not load page");
+        console.log("could not load page");
     }
     
 }
@@ -134,6 +134,21 @@ function get_users(){
 
 function get_user(user){
    return db_local_get_user(user);
+}
+
+
+function delete_user_current(){
+    //removes the current user & their data.
+    
+    var cUser = get_current_user();
+    if(cUser!== null && cUser.name !== undefined){
+         console.log('removing user ' +cUser.name+" & all their data" );
+        db_local_remove_user(cUser.name);
+        loadPage('frontpage');
+    }else{
+        console.log("could not select user to delete : "+cUser)
+    }
+   
 }
 
 function add_user(){
@@ -504,14 +519,14 @@ function db_local_save_point(point){
 }
 
 function db_local_get_current_user(){
-    return localStorage.getItem("user");
+    return JSON.parse(localStorage.getItem("user"));
 }
 
 function db_local_get_user(user){
-    var users = get_users();
+    var users = db_local_get_users();
     var foundUser = null;
     $.each(users,function(i,u){
-        if(u.name===user){
+        if(u.name.toLowerCase()===user.toLowerCase()){
             foundUser = u;
         }
     });
@@ -520,6 +535,34 @@ function db_local_get_user(user){
 
 function db_local_get_users(){
      return JSON.parse(localStorage.getItem("users"));
+}
+
+function db_local_remove_user(user){
+    if(db_local_get_user(user)!==null){
+        //Remove the users data
+        localStorage.removeItem(user + "_points");
+        
+        //Remove the user from the list
+        var users = db_local_get_users();
+        
+        var newUsers = [];
+        $.each(users,function(i,u){
+            if(u.name.toLowerCase()!==user.toLowerCase()){
+                newUsers.push(u);
+            }
+            else{
+                console.log("removing " + u.name + " from local DB");
+            }
+        });
+        
+        localStorage.setItem('users', JSON.stringify(newUsers));
+        
+        
+    }
+    else{
+        console.log("could not delete user "+user + ".  Not found in local DB.");
+    }
+    
 }
 
 function db_local_add_user(user){
