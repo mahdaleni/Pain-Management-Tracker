@@ -35,7 +35,7 @@ $( document ).ready(function() {
 });
 
 function firstStart(){
-        var thisUser =  localStorage.getItem("user");
+        var thisUser =  get_current_user();
         if(thisUser===null){
             loadPage("front");
         }else{
@@ -50,7 +50,7 @@ function loadPage(pagename){
        
         
         
-        if(pages[pagename].needs_login===true && localStorage.getItem("user")===null){
+        if(pages[pagename].needs_login===true && get_current_user()===null){
             alert_modal("Error : Please select user", "<p>Before loading some pages, you must select or create a user.  We have loaded the page for you to do this on, for more information, please check out the help/doco page.</p>");
             pagename = 'front';
         }
@@ -129,42 +129,23 @@ function start_front_page(){
 }
 
 function get_users(){
-     return JSON.parse(localStorage.getItem("users"));
+    return db_local_get_users();
 }
 
 function get_user(user){
-    var users = get_users();
-    var foundUser = null;
-    $.each(users,function(i,u){
-        if(u.name===user){
-            foundUser = u;
-        }
-    });
-   return foundUser;
+   return db_local_get_user(user);
 }
 
 function add_user(){
-    var thisUser = $("#front_input_name").val();
-    
-    if(thisUser.length > 3){
-        //check if this user is already in the system
-        var users = get_users();
-        var userExists = false;
-        $.each(users,function(i,u){
-            if(u.name===thisUser)userExists = true;
-        });
-        if(userExists){
-            alert_modal("Error : Name alerady exists", "<p>This name already exists in your local database, please select it from the 'Existing Users' section.</p>");
-          
-        }else{
-              $("#front_existing_users ul").append('<li><a href="#" onclick="select_user(\''+thisUser+'\')">'+thisUser+'</a></li>'); 
-              save_users();
-        }
-      
-    }else{
-            alert_modal("Error : Name too short", "<p>The name must be <strong>at least 4 characters long</strong> to be added.</p>");
+    var addUserResult = db_local_add_user($("#front_input_name").val());
+    if(addUserResult===true){
+        change_page_content('frontpage');
+    }
+    else{
+         alert_modal("Error", addUserResult);
           
     }
+    
     
 }
 
@@ -201,32 +182,24 @@ function select_user(user){
 }
 
 function get_points(timeframe){
-    
-    //if no timeframe is specified, set the time frame to the last 24 hours (in minutes)
-    if(timeframe===undefined)timeframe=1440;
-    //Update the timeframe to be the start of the time frame to this point.
-    timeframe = new Date().getTime() - (timeframe * 60 * 1000);
-    
-    var thisUser =  JSON.parse(localStorage.getItem("user"));
-    
-    var points = JSON.parse(localStorage.getItem(thisUser.name + "_points"));
-    if (points===null)return {};
-    else {
-        //Filter for time frame
-        var filteredPoints = {};
-        $.each(points, function(i,p){
-            if(i>timeframe)filteredPoints[i]=p;
-        });
-            
-        
-        
-        return points;
-    }
+    return db_local_get_points(timeframe);
 }
 
-function save_points(points){
-    var cUser = JSON.parse(localStorage.getItem("user"));
-    localStorage.setItem(cUser.name+ "_points", JSON.stringify(points));
+function get_current_user(){
+    return db_local_get_current_user();
+}
+
+function add_user(user){
+    db_local_add_user(user);
+}
+
+//returns an array of point data for the PID, or undefined if nothing set.
+function get_point_data(pid){
+    
+}
+
+function save_point(point){
+    db_local_save_point(point);
 }
 
 function start_main_page(){
@@ -249,17 +222,14 @@ function start_main_page(){
 
 function main_point_save_data(){
     //get the form data
-    var formData = {};
+    var id = new Date().getTime();
+    var formData = {id:id};
     $.each($("#alert_modal_wrap").find("form").serializeArray(),function(i,d){
         formData[d.name]=d.value;
     });
     //add the location as percentages
     
-    var id = new Date().getTime();
-    var existingPoints = get_points();
-    existingPoints[id]=formData;
-    
-    save_points(existingPoints);
+    save_point(formData);
     $("#alert_modal_wrap").modal('hide');
     $("#newMarker").attr('id',"point_"+id);
     
@@ -271,8 +241,13 @@ function main_point_click(pid){
     main_point_edit(pid);
 }
 
-function main_point_edit(div_id){
+function main_point_edit(point_id){
     //Loads the point in the div into the edit window.
+    //First, load the modal
+    
+    load_modal("Pain Details", "page_wrap_main_modal_data");
+    
+    //get the point values
     
     
 }
@@ -517,3 +492,80 @@ var pages = {
                 "needs_login":false
             }
     };
+    
+    
+function db_local_get_points(timeframe){
+    
+    //if no timeframe is specified, set the time frame to the last 24 hours (in minutes)
+    if(timeframe===undefined)timeframe=1440;
+    //Update the timeframe to be the start of the time frame to this point.
+    timeframe = new Date().getTime() - (timeframe * 60 * 1000);
+    
+    var thisUser =  JSON.parse(localStorage.getItem("user"));
+    
+    var points = JSON.parse(localStorage.getItem(thisUser.name + "_points"));
+    if (points===null)return {};
+    else {
+        //Filter for time frame
+        var filteredPoints = {};
+        $.each(points, function(i,p){
+            if(i>timeframe)filteredPoints[i]=p;
+        });
+            
+        
+        
+        return points;
+    }
+}
+
+
+function db_local_save_point(point){
+    
+    var existingPoints = get_points();
+    
+    var cUser = JSON.parse(localStorage.getItem("user"));
+    existingPoints[point.id]=point;
+    localStorage.setItem(cUser.name+ "_points", JSON.stringify(existingPoints));
+}
+
+function db_local_get_current_user(){
+    return localStorage.getItem("user");
+}
+
+function db_local_get_user(user){
+    var users = get_users();
+    var foundUser = null;
+    $.each(users,function(i,u){
+        if(u.name===user){
+            foundUser = u;
+        }
+    });
+   return foundUser;
+}
+
+function db_local_get_users(){
+     return JSON.parse(localStorage.getItem("users"));
+}
+
+function db_local_add_user(user){
+    
+    if(user.length > 3){
+        //check if this user is already in the system
+        var users = get_users();
+        var userExists = false;
+        $.each(users,function(i,u){
+            if(u.name===thisUser)userExists = true;
+        });
+        if(userExists){
+            alert_modal("Error : Name alerady exists", "<p>This name already exists in your local database, please select it from the 'Existing Users' section.</p>");
+          
+        }else{
+              $("#front_existing_users ul").append('<li><a href="#" onclick="select_user(\''+thisUser+'\')">'+thisUser+'</a></li>'); 
+              save_users();
+        }
+      
+    }else{
+            return("<p>The name must be <strong>at least 4 characters long</strong> to be added.</p>");
+          
+    }
+}

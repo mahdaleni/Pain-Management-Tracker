@@ -1,5 +1,5 @@
 # Pain-Management-Tracker
-Simple HTML/JS app for tracking pain on the body using browser database. Utilizes Jquery &amp; Twitter Bootstrap
+Simple HTML/JS app for tracking pain on the body using browser database. Utilizes Jquery &amp; Twitter Bootstrap.  Runs on client side only, no server required.
 
 For easy tracking of pain in the body for future analysis.  
 
