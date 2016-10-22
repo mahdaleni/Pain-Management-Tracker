@@ -428,7 +428,14 @@ function get_time_offset_string(timestamp){
 function main_set_time_fields(startTimeStamp, endTimeStamp){
     var startT = new Date(startTimeStamp);
     var endT = new Date(endTimeStamp);
-    $("#alert_modal_wrap").find('#time_start').val(dt_to_string(startT));
+    
+    //if this is a new ID, set the start time.
+    if($("#alert_modal_wrap").find("#id").val() ==='new'){
+        $("#alert_modal_wrap").find('#time_start').val(dt_to_string(startT));
+        console.log("Found value to be new : " + $("#alert_modal_wrap").find("#id").val());
+    }
+    
+    //Set the end time.
     $("#alert_modal_wrap").find('#time_end').val(dt_to_string(endT));
     
     
