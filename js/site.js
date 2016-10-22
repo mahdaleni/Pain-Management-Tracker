@@ -209,6 +209,8 @@ function start_main_page(){
     
     var exPoints = get_points();
     $.each(exPoints,function(i,p){main_place_dot(p.position_x,p.position_y,"dot_id_"+i,p)});
+    
+    $('.clickItem').popover({trigger:'hover'});
 
 }
 
@@ -361,7 +363,7 @@ function main_place_dot(pos_pc_x,pox_pc_y,id,pData){
         //now that the new div is in the active DOM, check and add hover listener
         if(pData!==undefined && id!=="newMarker"){
             
-            $('#'+id).popover({trigger:'hover'});
+            $('.clickItem').popover({trigger:'hover'});
         }
         
 }
