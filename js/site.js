@@ -195,25 +195,24 @@ function save_point(point){
 }
 
 function start_main_page(){
-    $(window).off();
-   //remove any newmarker if it exists
-     if($("#newMarker").position()!== undefined){
-            $("#newMarker").detach();
-        }
     
+    //Remove any window listeners (used for resizing)
+    $(window).off();
+   
     $("#main_img_body_outline").click(function(e) {
         main_click_img_add_dot(this,e);
       });
     
-    //Remove any existing markup/html within the main body
-    $(".main_pain_point_marker").remove();
     
-    //check for existing points (defaults to last 24 hours.
-    
-    var exPoints = get_points();
-    $.each(exPoints,function(i,p){main_place_dot(p.position_x,p.position_y,"dot_id_"+i,p)});
+    //check for existing points (defaults to last 24 hours, 24 hours * 60 minutes)
+    main_load_dots(12*60);
     
     $('.clickItem').popover({trigger:'hover'});
+    $('.main_point_timeframe').click(function(){
+        
+        //Convert the hours for timeframe into minutes
+        main_load_dots($(this).find("input").val()*60);
+    });
     
     $(window).on('resize', function(){
         
@@ -307,6 +306,19 @@ function main_click_img_add_dot(thisCx, e){
     
 }
 
+function main_load_dots(timeframe){
+    //remove any newmarker if it exists
+     if($("#newMarker").position()!== undefined){
+            $("#newMarker").detach();
+        }
+    
+    //Remove any existing markup/html within the main body
+    $(".main_pain_point_marker").remove();
+    var exPoints = get_points(timeframe);
+    $.each(exPoints,function(i,p){main_place_dot(p.position_x,p.position_y,"dot_id_"+i,p);});
+}
+
+
 function main_place_dot(pos_pc_x,pox_pc_y,id,pData){
     
     
@@ -375,7 +387,7 @@ function main_place_dot(pos_pc_x,pox_pc_y,id,pData){
         context.fill();
         
          div.append(canvas);
-        $("#page_content").append(div);
+        $("#main_img_body_wrap").append(div);
         
         //now that the new div is in the active DOM, check and add hover listener
         if(pData!==undefined && id!=="newMarker"){
@@ -391,7 +403,7 @@ function main_time_select(time){
     
     switch(time){
         case '30 Secs':
-            endTime = startTime + 300000;
+            endTime = startTime + 30000;
         break;
         case '10 Mins':
             endTime = startTime + 10 * 60 * 1000;
@@ -539,16 +551,16 @@ function db_local_get_points(timeframe){
     if (points===null)return {};
  
     //if no timeframe is specified, set the time frame to the last 24 hours (in minutes)
-    else if(timeframe===undefined)return points;
+    else if(timeframe===undefined || isNaN(timeframe))return points;
     else {
          //Update the timeframe to be the start of the time frame to this point.
         timeframe = new Date().getTime() - (timeframe * 60 * 1000);
-    
-        
+      
         //Filter for time frame
         var filteredPoints = {};
         $.each(points, function(i,p){
-            if(i>timeframe)filteredPoints[i]=p;
+            //Firstly, if the pain started after the time frame, or its end is after the pain
+            if(i>timeframe || timeframe < new Date(p.time_end).getTime())filteredPoints[i]=p;
         });
         return filteredPoints;
     }
