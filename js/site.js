@@ -61,7 +61,6 @@ function firstStart(){
 
     }
 
-
 function loadPage(pagename){
     
     if(pagename in pages){
@@ -117,8 +116,6 @@ function generateMenu(activePage){
 
 function change_page_content(pagename){
      //Check and move the old poge back to its holding area
-     console.log("Loading " + pagename + " : " + JSON.stringify(pages[pagename]));
-    console.log($("#"+pages[pagename].div_id).html());
     var old_page = $("#current_page").val();
     
     if(old_page in pages){
@@ -199,10 +196,6 @@ function get_points(timeframe, type, loc){
 function get_current_user(){
     return db_local_get_current_user();
 }
-//
-//function add_user(user){
-//    db_local_add_user(user);
-//}
 
 //returns an array of point data for the PID, or undefined if nothing set.
 function get_point_data(pid){
@@ -213,6 +206,8 @@ function save_point(point){
     db_local_save_point(point);
 }
 
+
+// =========== Main Page Functions ===========
 function start_main_page(){
     
     //Remove any window listeners (used for resizing)
@@ -283,7 +278,6 @@ function main_point_save_data(){
     
 }
 
-
 //Edit a point when clicked
 function main_point_click(pid){
     main_point_edit(pid);
@@ -305,6 +299,7 @@ function main_point_edit(point_id){
     
     
 }
+
 function main_click_img_add_dot(thisCx, e){
     
         //Check for existing marker, if it does, remove it (only should have one new marker
@@ -355,7 +350,6 @@ function main_load_dots(timeframe, pType,pLoc){
     var exPoints = get_points(timeframe,pType,pLoc);
     $.each(exPoints,function(i,p){main_place_dot(p.position_x,p.position_y,"dot_id_"+i,p);});
 }
-
 
 function main_place_dot(pos_pc_x,pox_pc_y,id,pData){
     
@@ -461,6 +455,35 @@ function main_time_select(time){
     
 }
 
+function main_set_time_fields(startTimeStamp, endTimeStamp){
+    var startT = new Date(startTimeStamp);
+    var endT = new Date(endTimeStamp);
+    
+    //if this is a new ID, set the start time.
+    if($("#alert_modal_wrap").find("#id").val() ==='new'){
+        $("#alert_modal_wrap").find('#time_start').val(dt_to_string(startT));
+        console.log("Found value to be new : " + $("#alert_modal_wrap").find("#id").val());
+    }
+    
+    //Set the end time.
+    $("#alert_modal_wrap").find('#time_end').val(dt_to_string(endT));
+    
+    
+}
+
+
+// =========== Reports Page Functions ===========
+function start_reports_page(){
+    reports_show_available();
+}
+
+function reports_show_available(){
+    $.each(reports,function(i,d){
+        console.log(JSON.stringify(d));
+    });
+}
+
+// =========== General Functions ===========
 function get_time_string(strTimeStart, strTimeEnd){
     var timeFriendlyStart = get_time_offset_string(new Date(strTimeStart).getTime());
     var timeDuration = get_time_offset_string(new Date().getTime() - (new Date(strTimeEnd).getTime()-new Date(strTimeStart).getTime()));
@@ -470,7 +493,6 @@ function get_time_string(strTimeStart, strTimeEnd){
     
     return timeFriendlyStart + " ago : Duration = " + timeDuration;
 }
-
 
 function get_time_offset_string(timestamp){
     var timeSeconds = Math.floor((new Date().getTime() - timestamp) /1000);
@@ -494,35 +516,6 @@ function get_time_offset_string(timestamp){
     return friendlyTime;
 }
 
-function main_set_time_fields(startTimeStamp, endTimeStamp){
-    var startT = new Date(startTimeStamp);
-    var endT = new Date(endTimeStamp);
-    
-    //if this is a new ID, set the start time.
-    if($("#alert_modal_wrap").find("#id").val() ==='new'){
-        $("#alert_modal_wrap").find('#time_start').val(dt_to_string(startT));
-        console.log("Found value to be new : " + $("#alert_modal_wrap").find("#id").val());
-    }
-    
-    //Set the end time.
-    $("#alert_modal_wrap").find('#time_end').val(dt_to_string(endT));
-    
-    
-}
-
-
-
-
-
-function start_reports_page(){
-    
-}
-
-
-    
-
-
-
 function dt_to_string(dt){
    
  
@@ -536,8 +529,6 @@ function dt_to_string(dt){
     return time;
 }
 
-
-
 function pad(pad, str, padLeft) {
   if (typeof str === 'undefined') 
     return pad;
@@ -547,8 +538,6 @@ function pad(pad, str, padLeft) {
     return (str + pad).substring(0, pad.length);
   }
 }
-
-
 
 var reports = {
     'data':{
@@ -566,8 +555,6 @@ var reports = {
         'options':{}
     }
 };
-
-
 
 var pages = {
             'front':{
