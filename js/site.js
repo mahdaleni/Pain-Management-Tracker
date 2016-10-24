@@ -173,8 +173,8 @@ function select_user(user){
     loadPage('main');
 }
 
-function get_points(timeframe){
-    return db_local_get_points(timeframe);
+function get_points(timeframe, type){
+    return db_local_get_points(timeframe,type);
 }
 
 function get_current_user(){
@@ -209,9 +209,12 @@ function start_main_page(){
     
     $('.clickItem').popover({trigger:'hover'});
     $('.main_point_timeframe').click(function(){
-        
         //Convert the hours for timeframe into minutes
-        main_load_dots($(this).find("input").val()*60);
+        main_load_dots($(this).find("input").val());
+    });
+    $('.main_point_paintype').click(function(){
+        //Convert the hours for timeframe into minutes
+        main_load_dots(undefined,$(this).find("input").val());
     });
     
     $(window).on('resize', function(){
@@ -306,15 +309,25 @@ function main_click_img_add_dot(thisCx, e){
     
 }
 
-function main_load_dots(timeframe){
+function main_load_dots(timeframe, pType){
     //remove any newmarker if it exists
      if($("#newMarker").position()!== undefined){
             $("#newMarker").detach();
+            
         }
+    
+    //if the time frame is undefined, see if we can get it.
+    if(timeframe===undefined)timeframe = $("#main_buttons_group_timeframe .active input").val();
+    //if the time frame is undefined, see if we can get it.
+    if(pType===undefined)pType = $("#main_buttons_group_type .active input").val();
     
     //Remove any existing markup/html within the main body
     $(".main_pain_point_marker").remove();
-    var exPoints = get_points(timeframe);
+    
+    
+    
+    
+    var exPoints = get_points(timeframe,pType);
     $.each(exPoints,function(i,p){main_place_dot(p.position_x,p.position_y,"dot_id_"+i,p);});
 }
 
@@ -542,28 +555,45 @@ var pages = {
     };
     
     
-function db_local_get_points(timeframe){
+function db_local_get_points(timeframe,pain_type){
     
-   
     var thisUser =  JSON.parse(localStorage.getItem("user"));
     
     var points = JSON.parse(localStorage.getItem(thisUser.name + "_points"));
     if (points===null)return {};
- 
-    //if no timeframe is specified, set the time frame to the last 24 hours (in minutes)
-    else if(timeframe===undefined || isNaN(timeframe))return points;
-    else {
-         //Update the timeframe to be the start of the time frame to this point.
-        timeframe = new Date().getTime() - (timeframe * 60 * 1000);
-      
-        //Filter for time frame
-        var filteredPoints = {};
-        $.each(points, function(i,p){
-            //Firstly, if the pain started after the time frame, or its end is after the pain
-            if(i>timeframe || timeframe < new Date(p.time_end).getTime())filteredPoints[i]=p;
-        });
-        return filteredPoints;
-    }
+    
+    //Create an array to store filtered points in
+    var filteredPoints = {};
+    
+    var timeframestamp = new Date().getTime()-(timeframe*60*60*1000);
+    
+    $.each(points,function(i,p){
+        var tfAcc, tyAcc = false;
+        
+        //Check the timeframe first
+        if(timeframe===undefined || timeframe==="all" )tfAcc=true;
+        else{
+             if(    i>timeframestamp || 
+                    timeframestamp < new Date(p.time_end).getTime()){
+                 tfAcc=true;
+             }
+        }
+        
+        //Now check for pain type
+        if(pain_type===undefined){
+            tyAcc=true;
+        }
+        else{
+            if(pain_type===p.pain_location || pain_type==="all")tyAcc=true;
+        }
+        
+        //Now if it passed both filters, add it to the filtered points
+        if(tfAcc===true && tyAcc===true)filteredPoints[i]=p;
+        
+    });
+    
+    return filteredPoints;
+   
 }
 
 function db_local_get_point(pid){

@@ -67,7 +67,7 @@
                         <hr>
                         <h4>Time Frame</h4>
                         <p><i>Show pain points in the last : </i></p>
-                        <div class="btn-group" data-toggle="buttons">
+                        <div class="btn-group" id="main_buttons_group_timeframe" data-toggle="buttons">
                             
                             <label class="btn btn-primary main_point_timeframe">
                                 <input type="radio" name="main_point_timeframe" id="opt_0" value="0">Now
@@ -82,9 +82,30 @@
                               <input type="radio" name="main_point_timeframe" id="opt_168" value="168">Week
                             </label>
                             <label class="btn btn-primary main_point_timeframe">
-                              <input type="radio" name="main_point_timeframe" id="opt_168"> All
+                              <input type="radio" name="main_point_timeframe" id="opt_168" value="all"> All
                             </label>
                           </div>
+                        <hr>
+                        <h4>Pain Type</h4>
+                        <p><i>Show the following types of pain </i></p>
+                        <div class="btn-group" id="main_buttons_group_type"  data-toggle="buttons">
+                            <label class="btn btn-primary main_point_paintype">
+                                <input type="radio" name="main_point_paintype" value="Muscle">Muscle
+                            </label>
+                            <label class="btn btn-primary main_point_paintype">
+                              <input type="radio" name="main_point_paintype" value="Skin">Skin
+                            </label>
+                            <label class="btn btn-primary main_point_paintype">
+                              <input type="radio" name="main_point_paintype" value="Joint">Joint
+                            </label>
+                            <label class="btn btn-primary main_point_paintype">
+                              <input type="radio" name="main_point_paintype" value="Other">Other
+                            </label>
+                            <label class="btn btn-primary main_point_paintype active">
+                              <input type="radio" name="main_point_paintype" value="all"> All
+                            </label>
+                          </div>
+                        
                     </div>
                     
                 </div>
