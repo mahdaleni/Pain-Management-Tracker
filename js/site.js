@@ -211,7 +211,18 @@ function start_main_page(){
     $.each(exPoints,function(i,p){main_place_dot(p.position_x,p.position_y,"dot_id_"+i,p)});
     
     $('.clickItem').popover({trigger:'hover'});
+    
+    $(window).on('resize', function(){});
 
+}
+
+function main_resize(){
+    $(".clickItem").remove();
+    
+    var exPoints = get_points();
+    $.each(exPoints,function(i,p){main_place_dot(p.position_x,p.position_y,"dot_id_"+i,p)});
+    
+    $('.clickItem').popover({trigger:'hover'});
 }
 
 function main_point_save_data(){
@@ -418,7 +429,7 @@ function get_time_offset_string(timestamp){
         var friendlyTime = Math.floor(timeSeconds/60/60) +"h " + Math.floor((timeSeconds/60)%60) + "m"; 
     }
     else if(timeSeconds < 604800){        //7 days
-        var friendlyTime = Math.floor(timeSeconds/24/60/60) +"d " + Math.floor((timeSeconds%24%60)/60) + "h"; 
+        var friendlyTime = Math.floor(timeSeconds/24/60/60) +"d " + Math.floor((timeSeconds/60/60)%24) + "h"; 
     }
     else if(timeSeconds > 604800){        //7 days
         var friendlyTime = Math.floor(timeSeconds/7/24/60/60) +"w " + Math.floor(timeSeconds/60/60/24%7) + "d"; 
