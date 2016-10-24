@@ -195,7 +195,7 @@ function save_point(point){
 }
 
 function start_main_page(){
-    
+    $(window).off();
    //remove any newmarker if it exists
      if($("#newMarker").position()!== undefined){
             $("#newMarker").detach();
@@ -205,6 +205,9 @@ function start_main_page(){
         main_click_img_add_dot(this,e);
       });
     
+    //Remove any existing markup/html within the main body
+    $(".main_pain_point_marker").remove();
+    
     //check for existing points (defaults to last 24 hours.
     
     var exPoints = get_points();
@@ -212,7 +215,10 @@ function start_main_page(){
     
     $('.clickItem').popover({trigger:'hover'});
     
-    $(window).on('resize', function(){});
+    $(window).on('resize', function(){
+        
+        start_main_page();
+    });
 
 }
 
@@ -312,7 +318,7 @@ function main_place_dot(pos_pc_x,pox_pc_y,id,pData){
         
         var div = $("<div />");
         div.attr("id", id);
-        div.attr("class", 'clickItem');
+        div.attr("class", 'clickItem main_pain_point_marker');
         div.attr("position", 'absolute');
         div.css("top", pox_pc_y * imgY);
         div.css("left", pos_pc_x * imgX);
