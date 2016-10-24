@@ -173,8 +173,8 @@ function select_user(user){
     loadPage('main');
 }
 
-function get_points(timeframe, type){
-    return db_local_get_points(timeframe,type);
+function get_points(timeframe, type, loc){
+    return db_local_get_points(timeframe,type,loc);
 }
 
 function get_current_user(){
@@ -215,6 +215,10 @@ function start_main_page(){
     $('.main_point_paintype').click(function(){
         //Convert the hours for timeframe into minutes
         main_load_dots(undefined,$(this).find("input").val());
+    });
+    $('.main_point_painloc').click(function(){
+        //Convert the hours for timeframe into minutes
+        main_load_dots(undefined,undefined,$(this).find("input").val());
     });
     
     $(window).on('resize', function(){
@@ -309,7 +313,7 @@ function main_click_img_add_dot(thisCx, e){
     
 }
 
-function main_load_dots(timeframe, pType){
+function main_load_dots(timeframe, pType,pLoc){
     //remove any newmarker if it exists
      if($("#newMarker").position()!== undefined){
             $("#newMarker").detach();
@@ -318,16 +322,18 @@ function main_load_dots(timeframe, pType){
     
     //if the time frame is undefined, see if we can get it.
     if(timeframe===undefined)timeframe = $("#main_buttons_group_timeframe .active input").val();
-    //if the time frame is undefined, see if we can get it.
+    //if the pain type is undefined, see if we can get it.
     if(pType===undefined)pType = $("#main_buttons_group_type .active input").val();
+    //if the pain location is undefined, see if we can get it.
+    if(pLoc===undefined)pLoc = $("#main_buttons_group_loc .active input").val();
     
     //Remove any existing markup/html within the main body
     $(".main_pain_point_marker").remove();
     
     
     
-    
-    var exPoints = get_points(timeframe,pType);
+    console.log(pLoc);
+    var exPoints = get_points(timeframe,pType,pLoc);
     $.each(exPoints,function(i,p){main_place_dot(p.position_x,p.position_y,"dot_id_"+i,p);});
 }
 
@@ -369,13 +375,13 @@ function main_place_dot(pos_pc_x,pox_pc_y,id,pData){
             
             //Popup Data
             div.attr("data-toggle", 'popover');
-            div.attr("title", pData.pain_location + " pain"); 
+            div.attr("title", pData.pain_type + " pain"); 
             div.attr("data-html", 'true'); 
             div.attr("data-content", timeFriendlyStart + "<br>" +  pData.notes); 
             div.attr("onclick","main_point_click('#"+id+"')");
             //Add the popover for the dot
             
-            switch (pData.pain_location.toLowerCase()){
+            switch (pData.pain_type.toLowerCase()){
                 case "joint":
                   context.fillStyle = '#F00000';
                 break;
@@ -555,7 +561,7 @@ var pages = {
     };
     
     
-function db_local_get_points(timeframe,pain_type){
+function db_local_get_points(timeframe,pain_type, pain_location){
     
     var thisUser =  JSON.parse(localStorage.getItem("user"));
     
@@ -567,8 +573,10 @@ function db_local_get_points(timeframe,pain_type){
     
     var timeframestamp = new Date().getTime()-(timeframe*60*60*1000);
     
+    console.log("data : " + timeframe + " : " + pain_type + " : " + pain_location); 
+    
     $.each(points,function(i,p){
-        var tfAcc, tyAcc = false;
+        var tfAcc, tyAcc, loAcc = false;
         
         //Check the timeframe first
         if(timeframe===undefined || timeframe==="all" )tfAcc=true;
@@ -580,15 +588,26 @@ function db_local_get_points(timeframe,pain_type){
         }
         
         //Now check for pain type
-        if(pain_type===undefined){
+        if(pain_type===undefined || pain_type==="all"){
             tyAcc=true;
         }
         else{
-            if(pain_type===p.pain_location || pain_type==="all")tyAcc=true;
+            if(pain_type===p.pain_type )tyAcc=true;
         }
         
+        
+        //Now check for pain type
+        if(pain_location===undefined || pain_location==='all'){
+            loAcc=true;
+        }
+        else{
+            if(pain_location===p.pain_location)loAcc=true;
+        }
+        
+        
+        
         //Now if it passed both filters, add it to the filtered points
-        if(tfAcc===true && tyAcc===true)filteredPoints[i]=p;
+        if(tfAcc===true && tyAcc===true && loAcc===true)filteredPoints[i]=p;
         
     });
     

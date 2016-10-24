@@ -82,7 +82,7 @@
                               <input type="radio" name="main_point_timeframe" id="opt_168" value="168">Week
                             </label>
                             <label class="btn btn-primary main_point_timeframe">
-                              <input type="radio" name="main_point_timeframe" id="opt_168" value="all"> All
+                                <input type="radio" name="main_point_timeframe" id="opt_all" value="all"> All
                             </label>
                           </div>
                         <hr>
@@ -103,6 +103,23 @@
                             </label>
                             <label class="btn btn-primary main_point_paintype active">
                               <input type="radio" name="main_point_paintype" value="all"> All
+                            </label>
+                          </div>
+                        <hr>
+                        <h4>Pain location</h4>
+                        <p><i>Show points recorded only in the following locations</i></p>
+                        <div class="btn-group" id="main_buttons_group_loc"  data-toggle="buttons">
+                            <label class="btn btn-primary main_point_painloc">
+                                <input type="radio" name="main_point_painloc" value="Front">Front
+                            </label>
+                            <label class="btn btn-primary main_point_painloc">
+                              <input type="radio" name="main_point_painloc" value="Back">Back
+                            </label>
+                            <label class="btn btn-primary main_point_painloc">
+                              <input type="radio" name="main_point_painloc" value="Side">Side
+                            </label>
+                            <label class="btn btn-primary main_point_painloc active">
+                              <input type="radio" name="main_point_painloc" value="all">All
                             </label>
                           </div>
                         
@@ -142,13 +159,22 @@
                               </div>
                             </div>
                             <div class="form-group">
-                              <label for="pain_location" class="col-sm-3 control-label">Pain Location/Type</label>
+                              <label for="pain_location" class="col-sm-3 control-label">Pain Type</label>
                               <div class="col-sm-9">
-                                  <select id="pain_location" name="pain_location"  aria-describedby="pain_location_helpblock" class="form-control">
+                                  <select id="pain_type" name="pain_type"  aria-describedby="pain_type_helpblock" class="form-control">
                                     <option>Muscle</option><option>Skin</option><option>Joint</option>
                                     <option>Other</option>
                                 </select>
-                                <span id="pain_location_helpblock" class="help-block">Please specify where you think the pain is, Muscle, Joint, Skin, or other.</span>
+                                <span id="pain_type_helpblock" class="help-block">Please specify where you think the pain is, Muscle, Joint, Skin, or other.</span>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label for="pain_location" class="col-sm-3 control-label">Pain Location</label>
+                              <div class="col-sm-9">
+                                  <select id="pain_location" name="pain_location"  aria-describedby="pain_location_helpblock" class="form-control">
+                                    <option>Front</option><option>Back</option><option>Side</option>
+                                </select>
+                                <span id="pain_location_helpblock" class="help-block">Is the pain on the front of your body, the back, or on the side?</span>
                               </div>
                             </div>
                               <div class="form-group">
