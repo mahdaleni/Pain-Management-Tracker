@@ -1,0 +1,88 @@
+
+            
+            <!-- Main - Point data entry modal -->
+            <div id="page_wrap_main_modal_data" class="hidden">
+                <div class="row">
+                    
+                    <div class="col-sm-12">
+
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                              <label for="pain_level" class="col-sm-3 control-label">Pain Level</label>
+                              <div class="col-sm-9">
+                                  <select id="pain_level" name="pain_level"  aria-describedby="pain_level_helpblock" class="form-control">
+                                    <option>1</option><option>2</option><option>3</option>
+                                    <option>4</option><option>5</option><option>6</option>
+                                    <option>7</option><option>8</option><option>9</option>
+                                    <option>10</option>
+                                </select>
+                                <span id="pain_level_helpblock" class="help-block">Please rate the level of pain in this area from 1 - 10, with 1 being the least amount, and 10 being the most amount of pain.</span>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label for="pain_location" class="col-sm-3 control-label">Pain Type</label>
+                              <div class="col-sm-9">
+                                  <select id="pain_type" name="pain_type"  aria-describedby="pain_type_helpblock" class="form-control">
+                                    <option>Muscle</option><option>Skin</option><option>Joint</option>
+                                    <option>Other</option>
+                                </select>
+                                <span id="pain_type_helpblock" class="help-block">Please specify where you think the pain is, Muscle, Joint, Skin, or other.</span>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label for="pain_location" class="col-sm-3 control-label">Pain Location</label>
+                              <div class="col-sm-9">
+                                  <select id="pain_location" name="pain_location"  aria-describedby="pain_location_helpblock" class="form-control">
+                                    <option>Front</option><option>Back</option><option>Side</option>
+                                </select>
+                                <span id="pain_location_helpblock" class="help-block">Is the pain on the front of your body, the back, or on the side?</span>
+                              </div>
+                            </div>
+                              <div class="form-group">
+                              <label for="notes" class="col-sm-3 control-label">Notes</label>
+                              <div class="col-sm-9">
+                                  <input type="text" class="form-control" id="notes" name="notes">
+                                <span id="notes_helpblock" class="help-block">Notes regarding this entry, eg:noticed weather change coming through, resting most of the day, etc.</span>
+                              </div>
+                            </div>
+                            <h3 class="text-center">Pain Duration</h3>
+                            <hr>
+                            <div class="form-group">
+                              <div class="col-sm-11 col-sm-offset-1">
+                                  <p> <i>Preset times</i></p>
+                                      <div class="btn-group" role="group" aria-label="Basic example">
+                                        <button type="button" onclick="main_time_select($(this).html())" class="btn btn-info">30 Secs</button>
+                                        <button type="button" onclick="main_time_select($(this).html())" class="btn btn-info">10 Mins</button>
+                                        <button type="button" onclick="main_time_select($(this).html())" class="btn btn-info">1 Hour</button>
+                                        <button type="button" onclick="main_time_select($(this).html())" class="btn btn-info">8 Hours</button>
+                                        <button type="button" onclick="main_time_select($(this).html())" class="btn btn-info">1 Day</button>
+                                      </div>
+                                      <br>
+                                      <br>
+                                     <div class="form-group row">
+                                        <label for="time_start" class="col-sm-1 control-label">Start</label>
+                                        <div class="col-sm-5">
+                                            <input type="text" class="form-control" id="time_start" name="time_start" placeholder="">
+                                        </div>
+                                        <label for="time_end" class="col-sm-1 control-label">Finish</label>
+                                        <div class="col-sm-5">
+                                            <input type="text" class="form-control" id="time_end" name="time_end" placeholder="">
+                                        </div>
+                                    </div>
+                              </div>
+                            </div>
+                          
+                            <input type="hidden" id="position_x" name="position_x" value="">
+                            <input type="hidden" id="position_y" name="position_y" value="">
+                            <input type="hidden" id="id" name="id" value="new">
+                            <div class="form-group">
+                              <div class="col-sm-12">
+                                <div class="btn btn-info btn-block btn-lg" onclick="main_point_save_data()">Save</div>
+                              </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            

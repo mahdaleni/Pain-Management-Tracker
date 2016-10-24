@@ -27,7 +27,7 @@ $( document ).ready(function() {
     if (typeof(Storage) !== "undefined") {
         
         //alert("storage available");
-        firstStart();
+        firstStart(); 
         
 } else {
     alert("Unsupoorted Browser, Please try using a modern browser such as Mozilla Firefox or Google Chrome");
@@ -35,12 +35,30 @@ $( document ).ready(function() {
 });
 
 function firstStart(){
-        var thisUser =  get_current_user();
-        if(thisUser===null){
-            loadPage("front");
-        }else{
-            loadPage("main");
-        }
+     
+        var html_imports = [
+            "./content/page_main.html",
+            "./content/page_front.html",
+            "./content/page_settings.html",
+            "./content/page_reports.html",
+            "./content/page_docs.html",
+            "./content/alert_point_data.html"
+        ];
+        //Get imported content
+        $.when.apply(null,html_imports.map(function(url){
+            return $.get(url,function(res){
+                $("#page_template_wrap").append(res);
+            });
+        })).then(function(){
+            //Once all content imported.
+            var thisUser =  get_current_user();
+            if(thisUser===null){
+                loadPage("front");
+            }else{
+                loadPage("main");
+            }
+        });
+
     }
 
 
@@ -93,12 +111,14 @@ function generateMenu(activePage){
         }
        // alert("added " + p.name+" to menu_"+p.menu);
     });
-    
+     
     
 }
 
 function change_page_content(pagename){
      //Check and move the old poge back to its holding area
+     console.log("Loading " + pagename + " : " + JSON.stringify(pages[pagename]));
+    console.log($("#"+pages[pagename].div_id).html());
     var old_page = $("#current_page").val();
     
     if(old_page in pages){
@@ -106,7 +126,6 @@ function change_page_content(pagename){
     }
     $("#page_content").html($("#"+pages[pagename].div_id).html());
     $("#current_page").val(pagename);
-    
     $("#"+pages[pagename].div_id).html("");
     
 }
@@ -281,7 +300,7 @@ function main_point_edit(point_id){
     $.each(pointDat,function(k,v){
         $("#alert_modal_wrap").find("#"+k).val(v);
     });
-    console.log(pointDat);
+    //console.log(pointDat);
     
     
     
@@ -293,9 +312,9 @@ function main_click_img_add_dot(thisCx, e){
             $("#newMarker").detach();
         }
         var offset = $(thisCx).offset();
-        console.log(e.pageX - offset.left );
-        console.log(e.pageY - offset.top);
-        console.log(offset);
+//        console.log(e.pageX - offset.left );
+//        console.log(e.pageY - offset.top);
+//        console.log(offset);
         
         var imgX = $("#main_img_body_outline").width();
         var imgY = $("#main_img_body_outline").height();
@@ -332,7 +351,7 @@ function main_load_dots(timeframe, pType,pLoc){
     
     
     
-    console.log(pLoc);
+  
     var exPoints = get_points(timeframe,pType,pLoc);
     $.each(exPoints,function(i,p){main_place_dot(p.position_x,p.position_y,"dot_id_"+i,p);});
 }
@@ -491,6 +510,19 @@ function main_set_time_fields(startTimeStamp, endTimeStamp){
     
 }
 
+
+
+
+
+function start_reports_page(){
+    
+}
+
+
+    
+
+
+
 function dt_to_string(dt){
    
  
@@ -518,7 +550,22 @@ function pad(pad, str, padLeft) {
 
 
 
-
+var reports = {
+    'data':{
+        'name':"Data Export Table",
+        'description':"Exports filtered data to a CSV file for download to your device",
+        'output':"file",
+        "fields":{},
+        'options':{}
+    },
+    'Simple':{
+        'name':"Simple Report",
+        'description':"Displays the data in a simple & easy to read report",
+        'output':"template_simple",
+        "fields":{},
+        'options':{}
+    }
+};
 
 
 
@@ -540,7 +587,7 @@ var pages = {
             'reports':{
                 'name':"Reports",
                 'div_id':'page_wrap_reports',
-                'js_run':false,
+                'js_run':function(){start_reports_page();},
                 'menu':'left',
                 "needs_login":true
             },
@@ -559,7 +606,7 @@ var pages = {
                 "needs_login":false
             }
     };
-    
+
     
 function db_local_get_points(timeframe,pain_type, pain_location){
     
@@ -573,7 +620,7 @@ function db_local_get_points(timeframe,pain_type, pain_location){
     
     var timeframestamp = new Date().getTime()-(timeframe*60*60*1000);
     
-    console.log("data : " + timeframe + " : " + pain_type + " : " + pain_location); 
+    
     
     $.each(points,function(i,p){
         var tfAcc, tyAcc, loAcc = false;
