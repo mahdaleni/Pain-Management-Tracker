@@ -55,7 +55,9 @@ function firstStart(){
             if(thisUser===null){
                 loadPage("front");
             }else{
-                loadPage("main");
+                var cPage = db_local_get_settings("current_page");
+                if(cPage!==undefined)loadPage(cPage);
+                else loadPage("main");
             }
         });
 
@@ -77,6 +79,8 @@ function loadPage(pagename){
             pages[pagename].js_run();
         }
         
+        //now set this as the last loaded page
+        db_local_set_setting("current_page",pagename);
       
     }else{
         console.log("could not load page");
@@ -663,7 +667,6 @@ function db_local_get_point(pid){
     
 }
 
-
 function db_local_save_point(point){
     //this function adds/edits points into the local database
     var existingPoints = get_points();
@@ -677,6 +680,34 @@ function db_local_get_current_user(){
     return JSON.parse(localStorage.getItem("user"));
 }
 
+function db_local_get_settings(setting){
+    var cUser = db_local_get_current_user();
+    
+    var settings = JSON.parse(localStorage.getItem(cUser.name+"_settings"));
+    
+   //If there is a specific option we are looking for    
+    if(setting !== undefined){
+        var filteredOption = undefined;
+        $.each(settings, function(i,s){
+            if(i===setting)filteredOption=s;
+        });
+        return filteredOption;
+    }
+    else if(settings===null)return{};
+    
+    else{
+        return settings;
+    }
+}
+
+function db_local_set_setting(optionName,optionValue){
+    var exSettings = db_local_get_settings();
+    exSettings[optionName]=optionValue;
+    
+    var cUser = db_local_get_current_user();
+    localStorage.setItem(cUser.name+"_settings", JSON.stringify(exSettings));
+    
+}
 function db_local_get_user(user){
     var users = db_local_get_users();
     var foundUser = null;
