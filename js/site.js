@@ -482,6 +482,7 @@ function start_reports_page(){
 }
 
 function reports_show_available(){
+    $("#reports_left_menu ul").html("");
     $.each(reports,function(i,d){
         $("#reports_left_menu ul").append(
                 '<li><a href="#" onclick="reports_load_options(\''+i+'\')"><strong>'+d.name+'</strong><br><i>'+d.description+'</i></a></li>');
