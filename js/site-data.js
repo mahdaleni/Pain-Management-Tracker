@@ -5,14 +5,14 @@ var reports = {
         'description':"Exports filtered data to a CSV file for download to your device",
         'js_generate':"reports_generate_file",
         "filters":['all'],
-        'options':{}
+        'options':[]
     },
     'simple':{
         'name':"Simple Report Table",
         'description':"Displays the data in a simple table",
         'js_generate':"report_simple",
         "filters":['all'],
-        'options':{}
+        'options':[]
     }
 };
 

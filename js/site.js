@@ -492,14 +492,35 @@ function reports_show_available(){
 function reports_load_options(report){
     var rDat = reports[report];
     
-    
-    console.log(rDat);
-}
-
-function reports_generate(){
+    reports_generate_paramaters(rDat);
     
 }
 
+function reports_generate_paramaters(rdata){
+    //Check what filters are vailable
+    if(rdata.filters.length>=1){
+        //Prepare a HTML form object
+        var filterHTML = $("<div><form id='report_generate_filter'></form></div>");
+        if(rdata.filters[0]==='all'){
+            rdata.filters=[];
+            $.each(report_filters,function(i,d){
+                rdata.filters[i]=d;
+            });
+            
+            $.each(rdata.filters,function(i,k){
+                filterHTML.find('form').append(reports_filter_html(k));
+            });
+        }
+        //Add the filter HTML to the reports content dive
+        $("#reports_content").html(filterHTML.html());
+    }
+    console.log(rdata);
+}
+
+function reports_filter_html(fData){
+    return JSON.stringify(fData);
+    
+}
 function reports_generate_file(filters,options){
     
 }
