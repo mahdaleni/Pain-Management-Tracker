@@ -483,9 +483,25 @@ function start_reports_page(){
 
 function reports_show_available(){
     $.each(reports,function(i,d){
-        $("#reports_left_menu ul").append('<li><a href="#"><strong>'+d.name+'</strong><br><i>'+d.description+'</i></a></li>');
-        console.log(JSON.stringify(d));
+        $("#reports_left_menu ul").append(
+                '<li><a href="#" onclick="reports_load_options(\''+i+'\')"><strong>'+d.name+'</strong><br><i>'+d.description+'</i></a></li>');
+        
     });
+}
+
+function reports_load_options(report){
+    var rDat = reports[report];
+    
+    
+    console.log(rDat);
+}
+
+function reports_generate(){
+    
+}
+
+function reports_generate_file(filters,options){
+    
 }
 
 // =========== General Functions ===========
