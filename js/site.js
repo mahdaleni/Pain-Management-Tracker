@@ -525,10 +525,17 @@ function reports_generate_paramaters(rdata){
 
 function reports_filter_html(i,fD){
     var html = $("<div><div class='form-group'>"+
-        "<div class='col-sm-1'><input type='checkbox' class='checkbox-toggle' id='filter_enabled_"+i+"'></div>"+
-        "<label for='"+i+"' class='col-sm-2 control-label'>"+fD.name+"</label>"+
+        "<label for='"+i+"' class='col-sm-4 control-label'>"+fD.name+"</label>"+
         "<div class='col-sm-6 filter-input'></div>" +
         "</div></div>");
+
+    //if this is not required, put an option to disable/enable the filter
+    if(fD.required===false){
+        $(html).find('.form-group').prepend("<div class='col-sm-2'><input type='checkbox' class='checkbox-toggle' id='filter_enabled_"+i+"'></div>");
+    }else{
+        //Change the class on the label
+        html.find("label").addClass("col-sm-offset-2");
+    }
     switch(fD.type){
         case ('number'):
             //Add the input
@@ -557,6 +564,8 @@ function reports_filter_html(i,fD){
             
         break;
         case ('text'):
+            //Add the input
+            html.find('.filter-input').append("<input described_by='helpblock_"+i+"' class='form-control' type='text' id='"+i+"'>");
             
         break;
         
