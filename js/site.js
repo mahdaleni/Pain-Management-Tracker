@@ -498,28 +498,98 @@ function reports_load_options(report){
 }
 
 function reports_generate_paramaters(rdata){
+    //Clear out the contents location
+    $("#reports_content").html("");
     //Check what filters are vailable
     if(rdata.filters.length>=1){
         //Prepare a HTML form object
-        var filterHTML = $("<div><form id='report_generate_filter'></form></div>");
+        var filterHTML = $("<div><form class='form-horizontal' id='report_generate_filter'></form></div>");
         if(rdata.filters[0]==='all'){
-            rdata.filters=[];
+            var requiredFilters = {};
             $.each(report_filters,function(i,d){
-                rdata.filters[i]=d;
+                requiredFilters[i]=d;
             });
             
-            $.each(rdata.filters,function(i,k){
-                filterHTML.find('form').append(reports_filter_html(k));
+            $.each(requiredFilters,function(i,k){
+                filterHTML.find('form').append(reports_filter_html(i,k));
             });
         }
         //Add the filter HTML to the reports content dive
         $("#reports_content").html(filterHTML.html());
+        
+    
+        //Enable the checkbox switches
+        $("#reports_content").find(".checkbox-toggle").bootstrapToggle({on: 'Enabled',off: 'Disabled'});
     }
-    console.log(rdata);
 }
 
-function reports_filter_html(fData){
-    return JSON.stringify(fData);
+function reports_filter_html(i,fD){
+    var html = $("<div><div class='form-group'>"+
+        "<div class='col-sm-1'><input type='checkbox' class='checkbox-toggle' id='filter_enabled_"+i+"'></div>"+
+        "<label for='"+i+"' class='col-sm-2 control-label'>"+fD.name+"</label>"+
+        "<div class='col-sm-6 filter-input'></div>" +
+        "</div></div>");
+    switch(fD.type){
+        case ('number'):
+            //Add the input
+            html.find('.filter-input').append("<input described_by='helpblock_"+i+"' class='form-control' type='number' id='"+i+"'>");
+            
+            //If min/max values are set
+            if("int_min" in fD && "int_max" in fD){
+                html.find("#"+i).attr('min',fD.int_min);
+                html.find("#"+i).attr('max',fD.int_max); 
+            }
+            
+        break;
+        case ('select'):
+            html.find('.filter-input').append("<select described_by='helpblock_"+i+"' class='form-control' id='"+i+"'></select");
+            if("values" in fD)$.each(fD.values, function(k,d){
+                html.find("#"+i).append('<option value="'+d.value+'">'+d.name+'</option>');
+            });
+            //If min/max values are set
+            if("int_min" in fD && "int_max" in fD){
+                html.find("#"+i).attr('min',fD.int_min);
+                html.find("#"+i).attr('max',fD.int_max); 
+            }
+        break;
+        case ('datetime'):
+            html.find('.filter-input').append("<input described_by='helpblock_"+i+"' class='form-control' type='datetime-local' id='"+i+"'>");
+            
+        break;
+        case ('text'):
+            
+        break;
+        
+        
+     
+
+        
+    }
+    
+    
+    //if there is a default value
+     if('default_value' in fD){
+         //If it is a select box, select the default value
+         if(html.find("#"+i).is('select')){
+             html.find("#"+i+ " option[value="+fD.default_value+"]").attr('selected','selected');
+         }
+         else if(html.find("#"+i).attr('type')==="datetime-local"){
+             var formattedDate = dt_to_string(new Date(fD.default_value)).replace(" ","T");
+             html.find("#"+i).attr('value',formattedDate);
+         }
+         else{
+            html.find("#"+i).attr('value',fD.default_value);
+         }
+     }
+
+     //if there is a description, add it as helper text
+      if('description' in fD){
+          html.find("#"+i).after( "<span id='helpblock_"+i+"' class='help-block'>"+fD.description+"</span>");
+      }
+      
+      
+    return html.html();
+    
     
 }
 function reports_generate_file(filters,options){
@@ -568,7 +638,6 @@ function dt_to_string(dt){
             + pad('00',dt.getHours(),true) + ':' 
             + pad('00',dt.getMinutes(),true) + ':' 
             + pad('00',dt.getSeconds(),true) ;
-    console.log(time);
     return time;
 }
 
