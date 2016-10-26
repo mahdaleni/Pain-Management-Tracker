@@ -26,7 +26,7 @@ var report_filters={
         int_max:10,
         default_value:1,
         filter_type:">=", 
-        required:true
+        required:false
     },
     pain_location:{
         name:"Pain Location",

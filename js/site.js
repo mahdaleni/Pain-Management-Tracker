@@ -503,7 +503,7 @@ function reports_generate_paramaters(rdata){
     //Check what filters are vailable
     if(rdata.filters.length>=1){
         //Prepare a HTML form object
-        var filterHTML = $("<div><form class='form-horizontal' id='report_generate_filter'></form></div>");
+        var filterHTML = $("<div><h2>Report Filters/Options</h2><form class='form-horizontal' id='report_generate_filter'></form></div>");
         if(rdata.filters[0]==='all'){
             var requiredFilters = {};
             $.each(report_filters,function(i,d){
@@ -517,6 +517,8 @@ function reports_generate_paramaters(rdata){
         //Add the filter HTML to the reports content dive
         $("#reports_content").html(filterHTML.html());
         
+        //add a button to the end of the filters list
+        $("#reports_content").append('<hr><div class="btn btn-default btn-block btn-lg" onclick="reports_generate_form_submit()">Generate Report</div>');
     
         //Enable the checkbox switches
         $("#reports_content").find(".checkbox-toggle").bootstrapToggle({on: 'Enabled',off: 'Disabled'}).change(function(){reports_filter_action_checkboxes();});
@@ -626,6 +628,13 @@ function reports_filter_html(i,fD){
     
     
 }
+
+// Serializes the filter inputs and passes them to the generate report function
+function reports_generate_form_submit(){
+    
+}
+
+
 function reports_generate_file(filters,options){
     
 }
