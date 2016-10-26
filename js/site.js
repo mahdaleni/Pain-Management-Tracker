@@ -519,8 +519,33 @@ function reports_generate_paramaters(rdata){
         
     
         //Enable the checkbox switches
-        $("#reports_content").find(".checkbox-toggle").bootstrapToggle({on: 'Enabled',off: 'Disabled'});
+        $("#reports_content").find(".checkbox-toggle").bootstrapToggle({on: 'Enabled',off: 'Disabled'}).change(function(){reports_filter_action_checkboxes();});
+        reports_filter_action_checkboxes();
     }
+}
+
+function reports_filter_action_checkboxes(){
+    $('.checkbox-toggle').each(function(i,d){
+        //make a var to shorten the parent parent thing
+        var fG = $(d).parent().parent().parent();
+        
+        // Create a var to hold a pointer to the input dom
+        var inputD = fG.find(".filter-input input");
+        
+        //Check that we got the input dom
+        if(!inputD.length)inputD = fG.find(".filter-input select");
+        
+        //If the toggle is enabled
+        if(fG.find(".checkbox-toggle").prop('checked')===true){
+            //Dont disable the input
+            inputD.prop('disabled',false);
+        }else{
+            //Disable the input
+            inputD.prop('disabled',true);
+            
+        }
+        
+    });
 }
 
 function reports_filter_html(i,fD){
