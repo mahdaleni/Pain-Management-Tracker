@@ -566,7 +566,7 @@ function reports_filter_html(i,fD){
     switch(fD.type){
         case ('number'):
             //Add the input
-            html.find('.filter-input').append("<input described_by='helpblock_"+i+"' class='form-control' type='number' id='"+i+"'>");
+            html.find('.filter-input').append("<input name='"+i+"' described_by='helpblock_"+i+"' class='form-control' type='number' id='"+i+"'>");
             
             //If min/max values are set
             if("int_min" in fD && "int_max" in fD){
@@ -576,7 +576,7 @@ function reports_filter_html(i,fD){
             
         break;
         case ('select'):
-            html.find('.filter-input').append("<select described_by='helpblock_"+i+"' class='form-control' id='"+i+"'></select");
+            html.find('.filter-input').append("<select name='"+i+"' described_by='helpblock_"+i+"' class='form-control' id='"+i+"'></select");
             if("values" in fD)$.each(fD.values, function(k,d){
                 html.find("#"+i).append('<option value="'+d.value+'">'+d.name+'</option>');
             });
@@ -587,12 +587,12 @@ function reports_filter_html(i,fD){
             }
         break;
         case ('datetime'):
-            html.find('.filter-input').append("<input described_by='helpblock_"+i+"' class='form-control' type='datetime-local' id='"+i+"'>");
+            html.find('.filter-input').append("<input name='"+i+"' described_by='helpblock_"+i+"' class='form-control' type='datetime-local' id='"+i+"'>");
             
         break;
         case ('text'):
             //Add the input
-            html.find('.filter-input').append("<input described_by='helpblock_"+i+"' class='form-control' type='text' id='"+i+"'>");
+            html.find('.filter-input').append("<input name='"+i+"' described_by='helpblock_"+i+"' class='form-control' type='text' id='"+i+"'>");
             
         break;
         
@@ -631,11 +631,15 @@ function reports_filter_html(i,fD){
 
 // Serializes the filter inputs and passes them to the generate report function
 function reports_generate_form_submit(){
-    
+    reports_generate_file($("#report_generate_filter").serializeArray());
 }
 
 
 function reports_generate_file(filters,options){
+    //Clear out the contents location
+    $("#reports_content").html("");
+    
+    $("#reports_content").html(JSON.stringify(filters));
     
 }
 
