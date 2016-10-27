@@ -650,8 +650,25 @@ function reports_generate_form_submit(fID){
     });
     var filteredPoints = get_points.apply(this,filters);
     
+    var organised_points = [];
+    
+    //Organise the points into consistent arrays
+    var opCount = 0;
+    $.each(filteredPoints, function(i,p){
+        organised_points[opCount] = {};
+        $.each(['pain_level','pain_location','pain_type','notes','time_start','time_end','position_x','position_y','id'],function(k,v){
+            if(v in p){
+                organised_points[opCount][v]=p[v];
+            }
+            else{
+                 organised_points[opCount][v]="";
+            }
+        });
+        opCount+=1;
+    });
+    
     //Now call the function to compile the report
-    window[reports[fID].js_generate](filteredPoints);
+    window[reports[fID].js_generate](organised_points);
     
 }
 
@@ -664,24 +681,25 @@ function reports_generate_file(points,options){
     var count = 0 ; 
     $.each(points,function(i ,d){
         
-        if(count===0){
+        if(count<1){
             csvRay[count]=[];
             //Put a header in
             $.each(d,function(k,r){
-                csvRay[count].push(r);
+                csvRay[count].push(k);
             });
-            count++;
+            count +=1;
         }
          // if this is the first iteration of this row,  
         if(csvRay[count]===undefined)csvRay[count]=[];
         
         $.each(d,function(k,r){
-              csvRay[count].push(r);
+              csvRay[count].push('"'+r+'"');
           });
-          count++;
+          count +=1;
 
     }); 
     
+    console.log(csvRay);
     $.each(csvRay,function(i,d){
         csvContent += d.toString() + "\n";
     });
