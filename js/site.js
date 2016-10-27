@@ -659,7 +659,7 @@ function reports_generate_form_submit(fID){
 function reports_generate_file(points,options){
     //Clear out the contents location
     $("#reports_content").html("");
-    var csvContent = "data:text/csv;charset=utf-8,\n";
+    var csvContent = "";
     var csvRay = [];
     var count = 0 ; 
     $.each(points,function(i ,d){
@@ -686,8 +686,16 @@ function reports_generate_file(points,options){
         csvContent += d.toString() + "\n";
     });
     
-    var encodedUri = encodeURI(csvContent);
-    window.open(encodedUri);
+    var encodedUri = "data:text/csv;charset=utf-8," + encodeURI(csvContent);
+    
+    //if no data found
+    if(Object.keys(points).length<1){
+        $("#reports_content").html("<div class='alert alert-warning alert-dissmissable'>No data found</div>");
+    }else{
+      //Now to present a file name, we have to show a link
+     $("#reports_content").html("<a class='btn btn-block btn-lg btn-info' download='pain_points_data.csv' href='"+encodedUri+"' target='_blank'>Download Data</a>");
+  
+    }
 }
 
 // =========== General Functions ===========
