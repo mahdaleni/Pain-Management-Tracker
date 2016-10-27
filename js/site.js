@@ -671,7 +671,25 @@ function reports_generate_form_submit(fID){
     window[reports[fID].js_generate](organised_points);
     
 }
-
+function reports_generate_simple(points,options){
+    //Generate a table in the $("#reports_content") section
+    $("#reports_content").html('<table class="table table-striped" id="report_generated_table"><thead></thead><tbody></tbody></table>');
+    
+    $.each(points,function(k,p){
+        //if this is the first one
+        if(k===0){
+            $("#report_generated_table thead").append("<tr></tr>");
+            $.each(p,function(k,v){
+                $("#report_generated_table thead tr:first").append("<th>"+db_fields[k].display+"</th>");
+            });
+        }
+        $("#report_generated_table tbody").append("<tr></tr>");
+        $.each(p,function(k,v){
+            $("#report_generated_table tbody tr:last").append("<td>"+v+"</td>");
+        });
+        
+    });
+}
 
 function reports_generate_file(points,options){
     //Clear out the contents location

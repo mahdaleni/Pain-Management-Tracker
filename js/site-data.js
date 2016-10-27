@@ -6,15 +6,48 @@ var reports = {
         'description':"Exports filtered data to a CSV file for download to your device",
         'js_generate':"reports_generate_file",
         "filters":['all'],
-        'options':[]
+        'options':{}
     },
     'simple':{
         'id':'simple',
         'name':"Simple Report Table",
         'description':"Displays the data in a simple table",
-        'js_generate':"report_simple",
+        'js_generate':"reports_generate_simple",
         "filters":['all'],
-        'options':[]
+        'options':{
+            fields:[{display:"Pain Level",name:"pain_level"}]
+        }
+    }
+};
+
+
+var db_fields = {
+    pain_level:{
+        display:"Pain Level"
+    },
+    pain_location:{
+        display:"Pain Location"
+    },
+    pain_type:{
+        display:"Pain Type"
+    },
+    notes:{
+        display:"Notes"
+    },
+    time_start:{
+        display:"Start time"
+    },
+    time_end:{
+        display:"End Time"
+    },
+    position_x:{
+        display:"Position X %"
+    },
+    position_y:{
+        display:"Position X %"
+    },
+    id:{
+        display:"record id"
     }
 };
 
