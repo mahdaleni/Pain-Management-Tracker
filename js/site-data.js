@@ -1,6 +1,7 @@
 
 var reports = {
     'data':{
+        'id':'data',
         'name':"Data Export (Download)",
         'description':"Exports filtered data to a CSV file for download to your device",
         'js_generate':"reports_generate_file",
@@ -8,6 +9,7 @@ var reports = {
         'options':[]
     },
     'simple':{
+        'id':'simple',
         'name':"Simple Report Table",
         'description':"Displays the data in a simple table",
         'js_generate':"report_simple",

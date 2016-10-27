@@ -521,7 +521,7 @@ function reports_generate_paramaters(rdata){
         $("#reports_content").html(filterHTML.html());
         
         //add a button to the end of the filters list
-        $("#reports_content").append('<hr><div class="btn btn-default btn-block btn-lg" onclick="reports_generate_form_submit()">Generate Report</div>');
+        $("#reports_content").append('<hr><div class="btn btn-default btn-block btn-lg" onclick="reports_generate_form_submit(\''+rdata.id+'\')">Generate Report</div>');
     
         //Enable the checkbox switches
         $("#reports_content").find(".checkbox-toggle").bootstrapToggle({on: 'Enabled',off: 'Disabled'}).change(function(){reports_filter_action_checkboxes();});
