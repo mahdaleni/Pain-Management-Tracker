@@ -633,7 +633,7 @@ function reports_filter_html(i,fD){
 }
 
 // Serializes the filter inputs and passes them to the generate report function
-function reports_generate_form_submit(){
+function reports_generate_form_submit(fID){
     //create an array to pass to the get points function
     var filters = new Array(6);
     //Fill it with undefined
@@ -649,18 +649,45 @@ function reports_generate_form_submit(){
         else if(v.name==='notes')filters[5]=v.value;
     });
     var filteredPoints = get_points.apply(this,filters);
-    console.log("Filter Ray = " + filters);
-    console.log(filteredPoints);
-    //reports_generate_file();
+    
+    //Now call the function to compile the report
+    window[reports[fID].js_generate](filteredPoints);
+    
 }
 
 
-function reports_generate_file(filters,options){
+function reports_generate_file(points,options){
     //Clear out the contents location
     $("#reports_content").html("");
+    var csvContent = "data:text/csv;charset=utf-8,\n";
+    var csvRay = [];
+    var count = 0 ; 
+    $.each(points,function(i ,d){
+        
+        if(count===0){
+            csvRay[count]=[];
+            //Put a header in
+            $.each(d,function(k,r){
+                csvRay[count].push(r);
+            });
+            count++;
+        }
+         // if this is the first iteration of this row,  
+        if(csvRay[count]===undefined)csvRay[count]=[];
+        
+        $.each(d,function(k,r){
+              csvRay[count].push(r);
+          });
+          count++;
+
+    }); 
     
-    $("#reports_content").html(JSON.stringify(filters));
+    $.each(csvRay,function(i,d){
+        csvContent += d.toString() + "\n";
+    });
     
+    var encodedUri = encodeURI(csvContent);
+    window.open(encodedUri);
 }
 
 // =========== General Functions ===========
