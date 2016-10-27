@@ -37,6 +37,15 @@ var report_filters={
         filter_type:"===", 
         required:false
     },
+    pain_type:{
+        name:"Pain Type",
+        description:"Filter for different types of pain",
+        type:"select",
+        values:[{name:'Muscle',value:'Muscle'},{name:'Skin',value:'Skin'},{name:'Joint',value:'Joint'},{name:'Other',value:'Other'},{name:'All',value:'all'}],
+        default_value:'all',
+        filter_type:"===", 
+        required:false  
+    },
     time_start:{
         name:"Start Date",
         description:"Filter for pain points active on or after the following date",

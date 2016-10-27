@@ -193,8 +193,8 @@ function select_user(user){
     loadPage('main');
 }
 
-function get_points(timeframe, type, loc){
-    return db_local_get_points(timeframe,type,loc);
+function get_points(type, loc, level, startTime, endTime, notesContain){
+    return db_local_get_points(type,loc, level, startTime, endTime, notesContain);
 }
 
 function get_current_user(){
@@ -348,10 +348,13 @@ function main_load_dots(timeframe, pType,pLoc){
     //Remove any existing markup/html within the main body
     $(".main_pain_point_marker").remove();
     
+    //Timeframe should be in hours
+    var startTime = new Date().getTime()-(timeframe*60*60*1000);
     
+    //If the timeframe is all, deset the start time
+    if(timeframe==='all')startTime = undefined;
     
-  
-    var exPoints = get_points(timeframe,pType,pLoc);
+    var exPoints = get_points(pType,pLoc,undefined,startTime);
     $.each(exPoints,function(i,p){main_place_dot(p.position_x,p.position_y,"dot_id_"+i,p);});
 }
 
@@ -631,7 +634,24 @@ function reports_filter_html(i,fD){
 
 // Serializes the filter inputs and passes them to the generate report function
 function reports_generate_form_submit(){
-    reports_generate_file($("#report_generate_filter").serializeArray());
+    //create an array to pass to the get points function
+    var filters = new Array(6);
+    //Fill it with undefined
+    filters.fill(undefined);
+    
+    //For each of the results
+    $.each($("#report_generate_filter").serializeArray(), function(k,v){
+        if(v.name==='pain_type')filters[0]=v.value;
+        else if(v.name==='pain_location')filters[1]=v.value;
+        else if(v.name==='pain_level')filters[2]=v.value;
+        else if(v.name==='time_start')filters[3]=new Date(v.value).getTime();
+        else if(v.name==='time_end')filters[4]=new Date(v.value).getTime();
+        else if(v.name==='notes')filters[5]=v.value;
+    });
+    var filteredPoints = get_points.apply(this,filters);
+    console.log("Filter Ray = " + filters);
+    console.log(filteredPoints);
+    //reports_generate_file();
 }
 
 
@@ -699,7 +719,7 @@ function pad(pad, str, padLeft) {
 }
 
     
-function db_local_get_points(timeframe,pain_type, pain_location){
+function db_local_get_points(pain_type, pain_location, pain_level, startTime, endTime, notesContain){
     
     var thisUser =  JSON.parse(localStorage.getItem("user"));
     
@@ -709,21 +729,13 @@ function db_local_get_points(timeframe,pain_type, pain_location){
     //Create an array to store filtered points in
     var filteredPoints = {};
     
-    var timeframestamp = new Date().getTime()-(timeframe*60*60*1000);
     
     
     
     $.each(points,function(i,p){
-        var tfAcc, tyAcc, loAcc = false;
+        var tyAcc, loAcc, plAcc, tsAcc, teAcc, noAcc = false;
         
-        //Check the timeframe first
-        if(timeframe===undefined || timeframe==="all" )tfAcc=true;
-        else{
-             if(    i>timeframestamp || 
-                    timeframestamp < new Date(p.time_end).getTime()){
-                 tfAcc=true;
-             }
-        }
+       
         
         //Now check for pain type
         if(pain_type===undefined || pain_type==="all"){
@@ -743,9 +755,55 @@ function db_local_get_points(timeframe,pain_type, pain_location){
         }
         
         
+        //Now check for pain type
+        if(pain_level===undefined || pain_level==='all'){
+            plAcc=true;
+        }
+        else{
+            if(pain_level<=p.pain_level)plAcc=true;
+        }
+        
+        //Check for time start
+        if(startTime===undefined || startTime==='all'){
+            tsAcc=true;
+        }
+        else{
+            var startTimeStamp = new Date(p.time_start).getTime();
+            var endTimeStamp = new Date(p.time_end).getTime();
+            
+            //If the point is started or active after the filtered start time.
+            if(startTimeStamp >= startTime || startTimeStamp > endTimeStamp){
+                tsAcc = true;
+            }
+        }
+        
+        //check for Time End
+        if(endTime===undefined || endTime==='all'){
+            teAcc=true;
+        }
+        else{
+            //Check if start time is active, and include the start accepted var as if it is false, the time filter has failed for this parameter
+             var endTimeStamp = new Date(p.time_end).getTime();
+             
+             if(endTimeStamp <= endTime && tsAcc){
+                 teAcc=true;
+             }
+        }
+        
+        //Now check for notes filter
+        if(notesContain===undefined){
+            noAcc=true;
+        }
+        else{
+           if(p.notes.indexOf(notesContain)!== -1){
+               noAcc=true;
+           }
+        }
+        
+        
         
         //Now if it passed both filters, add it to the filtered points
-        if(tfAcc===true && tyAcc===true && loAcc===true)filteredPoints[i]=p;
+        if(tyAcc===true && loAcc===true && tsAcc===true && teAcc===true && noAcc===true)filteredPoints[i]=p;
         
     });
     
