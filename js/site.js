@@ -506,7 +506,7 @@ function reports_generate_paramaters(rdata){
     //Check what filters are vailable
     if(rdata.filters.length>=1){
         //Prepare a HTML form object
-        var filterHTML = $("<div><h2>Report Filters/Options</h2><form class='form-horizontal' id='report_generate_filter'></form></div>");
+        var filterHTML = $("<div><h1 class='text-center'>"+rdata.name+"</h1><hr><h3>Report Filters/Options</h3><form class='form-horizontal' id='report_generate_filter'></form></div>");
         if(rdata.filters[0]==='all'){
             var requiredFilters = {};
             $.each(db_fields,function(i,d){
@@ -584,7 +584,7 @@ function reports_filter_html(i,fD){
         case ('select'):
             html.find('.filter-input').append("<select name='"+i+"' described_by='helpblock_"+i+"' class='form-control' id='"+i+"'></select");
             if("values" in fD)$.each(fD.values, function(k,d){
-                html.find("#"+i).append('<option value="'+d.value+'">'+d.display+'</option>');
+                html.find("#"+i).append('<option value="'+d.value+'">'+d.name+'</option>');
             });
             //If min/max values are set
             if("int_min" in fD && "int_max" in fD){
