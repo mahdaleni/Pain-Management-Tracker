@@ -23,38 +23,7 @@ var reports = {
 
 var db_fields = {
     pain_level:{
-        display:"Pain Level"
-    },
-    pain_location:{
-        display:"Pain Location"
-    },
-    pain_type:{
-        display:"Pain Type"
-    },
-    notes:{
-        display:"Notes"
-    },
-    time_start:{
-        display:"Start time"
-    },
-    time_end:{
-        display:"End Time"
-    },
-    position_x:{
-        display:"Position X %"
-    },
-    position_y:{
-        display:"Position X %"
-    },
-    id:{
-        display:"record id"
-    }
-};
-
-
-var report_filters={
-    pain_level:{
-        name:"Pain Level",
+        display:"Pain Level",  
         description:"Filter for selected pain levels and above",
         type:"number",
         int_min:1,
@@ -64,7 +33,7 @@ var report_filters={
         required:false
     },
     pain_location:{
-        name:"Pain Location",
+        display:"Pain Location",
         description:"Filter for specific locations",
         type:"select",
         values:[{name:'Front',value:'Front'},{name:'Side',value:'Side'},{name:'Back',value:'Back'},{name:'All',value:'all'}],
@@ -73,7 +42,7 @@ var report_filters={
         required:false
     },
     pain_type:{
-        name:"Pain Type",
+        display:"Pain Type",
         description:"Filter for different types of pain",
         type:"select",
         values:[{name:'Muscle',value:'Muscle'},{name:'Skin',value:'Skin'},{name:'Joint',value:'Joint'},{name:'Other',value:'Other'},{name:'All',value:'all'}],
@@ -81,8 +50,16 @@ var report_filters={
         filter_type:"===", 
         required:false  
     },
+    notes:{
+        display:"Notes",
+        name:"Notes",
+        description:"Filter for points that contain the following text in the notes",
+        type:"text",
+        filter_type:"contains", 
+        required:false
+    },
     time_start:{
-        name:"Start Date",
+        display:"Start time",
         description:"Filter for pain points active on or after the following date",
         type:"datetime",
         default_value:new Date().getTime() - (1000*60*60*24),
@@ -90,19 +67,27 @@ var report_filters={
         required:false
     },
     time_end:{
-        name:"End Date",
+        display:"End Time",
         description:"Filter for pain points active on or before the following date",
         type:"datetime",
         default_value:new Date().getTime(),
         filter_type:"<", 
         required:false
     },
-    notes:{
-        name:"Notes",
-        description:"Filter for points that contain the following text in the notes",
-        type:"text",
-        filter_type:"contains", 
-        required:false
+    position_x:{
+        display:"Position X %",
+        description:"Position X (horizontal)in percentage width of the image for the pain point",
+        type:"float"
+    },
+    position_y:{
+        display:"Position Y %",
+        description:"Position Y (Vertical) in percentage height of the image for the pain point",
+        type:"float"
+    },
+    id:{
+        display:"record id",
+        description:"Unique ID for the pain point, is basically the unix time stamp of when the point was added.",
+        type:"int"
     }
 };
 

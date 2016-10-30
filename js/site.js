@@ -509,8 +509,11 @@ function reports_generate_paramaters(rdata){
         var filterHTML = $("<div><h2>Report Filters/Options</h2><form class='form-horizontal' id='report_generate_filter'></form></div>");
         if(rdata.filters[0]==='all'){
             var requiredFilters = {};
-            $.each(report_filters,function(i,d){
-                requiredFilters[i]=d;
+            $.each(db_fields,function(i,d){
+                //Find valid fields that are filters.
+                if('required' in d){
+                    requiredFilters[i]=d;
+                }
             });
             
             $.each(requiredFilters,function(i,k){
@@ -555,7 +558,7 @@ function reports_filter_action_checkboxes(){
 
 function reports_filter_html(i,fD){
     var html = $("<div><div class='form-group'>"+
-        "<label for='"+i+"' class='col-sm-4 control-label'>"+fD.name+"</label>"+
+        "<label for='"+i+"' class='col-sm-4 control-label'>"+fD.display+"</label>"+
         "<div class='col-sm-6 filter-input'></div>" +
         "</div></div>");
 
@@ -581,7 +584,7 @@ function reports_filter_html(i,fD){
         case ('select'):
             html.find('.filter-input').append("<select name='"+i+"' described_by='helpblock_"+i+"' class='form-control' id='"+i+"'></select");
             if("values" in fD)$.each(fD.values, function(k,d){
-                html.find("#"+i).append('<option value="'+d.value+'">'+d.name+'</option>');
+                html.find("#"+i).append('<option value="'+d.value+'">'+d.display+'</option>');
             });
             //If min/max values are set
             if("int_min" in fD && "int_max" in fD){
