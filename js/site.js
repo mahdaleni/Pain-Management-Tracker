@@ -502,11 +502,11 @@ function reports_load_options(report){
 
 function reports_generate_paramaters(rdata){
     //Clear out the contents location
-    $("#reports_content").html("");
+    $("#reports_content").html("<h1 class='text-center'>"+rdata.name+"</h1><hr>");
     //Check what filters are vailable
     if(rdata.filters.length>=1){
         //Prepare a HTML form object
-        var filterHTML = $("<div><h1 class='text-center'>"+rdata.name+"</h1><hr><h3>Report Filters/Options</h3><form class='form-horizontal' id='report_generate_filter'></form></div>");
+        var filterHTML = $("<div><h3>Report Filters</h3><form class='form-horizontal' id='report_generate_filter'></form></div>");
         if(rdata.filters[0]==='all'){
             var requiredFilters = {};
             $.each(db_fields,function(i,d){
@@ -521,15 +521,30 @@ function reports_generate_paramaters(rdata){
             });
         }
         //Add the filter HTML to the reports content dive
-        $("#reports_content").html(filterHTML.html());
+        $("#reports_content").append(filterHTML.html());
         
-        //add a button to the end of the filters list
-        $("#reports_content").append('<hr><div class="btn btn-default btn-block btn-lg" onclick="reports_generate_form_submit(\''+rdata.id+'\')">Generate Report</div>');
-    
-        //Enable the checkbox switches
-        $("#reports_content").find(".checkbox-toggle").bootstrapToggle({on: 'Enabled',off: 'Disabled'}).change(function(){reports_filter_action_checkboxes();});
-        reports_filter_action_checkboxes();
+       
     }
+    
+    //If any options were supplied.
+    if(rdata.options.length>=1){
+        var optionsHTML = $("<div><h3>Report Options</h3></div>");
+        
+        $.each(rdata.options, function(i,oD){
+            optionsHTML.append(reports_options_html(i,oD));
+        });
+       
+    }
+    else{
+        $("#reports_content").append("<hr><p>No more options available for this report</p>");
+    }
+    
+     //add a button to the end of the filters list
+    $("#reports_content").append('<hr><div class="btn btn-default btn-block btn-lg" onclick="reports_generate_form_submit(\''+rdata.id+'\')">Generate Report</div>');
+
+    //Enable the checkbox switches
+    $("#reports_content").find(".checkbox-toggle").bootstrapToggle({on: 'Enabled',off: 'Disabled'}).change(function(){reports_filter_action_checkboxes();});
+    reports_filter_action_checkboxes();
 }
 
 function reports_filter_action_checkboxes(){
@@ -601,11 +616,6 @@ function reports_filter_html(i,fD){
             html.find('.filter-input').append("<input name='"+i+"' described_by='helpblock_"+i+"' class='form-control' type='text' id='"+i+"'>");
             
         break;
-        
-        
-     
-
-        
     }
     
     
@@ -633,6 +643,16 @@ function reports_filter_html(i,fD){
     return html.html();
     
     
+}
+
+function reports_options_html(i,oD){
+    //create a jquery object for putting HTML into
+    var html = $("<div><hr><h3>Report Options </h3></div>");
+    
+    
+    
+    //Return the appropriate HTML
+    return html;
 }
 
 // Serializes the filter inputs and passes them to the generate report function

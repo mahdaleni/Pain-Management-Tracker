@@ -15,7 +15,7 @@ var reports = {
         'js_generate':"reports_generate_simple",
         "filters":['all'],
         'options':{
-            fields:[{display:"Pain Level",name:"pain_level"}]
+            fields:[{'select_fields':true}]
         }
     }
 };
