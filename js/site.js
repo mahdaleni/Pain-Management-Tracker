@@ -649,6 +649,12 @@ function reports_options_html(i,oD){
     //create a jquery object for putting HTML into
     var html = $("<div><hr><h3>Report Options </h3></div>");
     
+    switch (i){
+        case('select_fields'):
+            //Provide a multichekcbox to select which fields, by default select the ones that also have filter options
+            
+        break;
+    }
     
     
     //Return the appropriate HTML
