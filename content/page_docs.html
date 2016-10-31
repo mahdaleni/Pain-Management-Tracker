@@ -2,4 +2,71 @@
             <!-- Documentation -->
             <div id="page_wrap_doco" class="hidden">
                 <h1>Documentation</h1>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-9">
+                        <h3 id="about">About</h3>
+                        <p>
+                            This app was intended to be a simple way for an individual to track points of pain in their body and generate reports from the data that is entered.  
+                            There was no professional assistance with the design or coding, so if you do know what you are doing and have some suggestions, I would love to hear them via the <a href="https://github.com/doatesy/Pain-Management-Tracker">github page</a>. </p>
+                        <p>
+                            Usage of the app should be fairly straight forward.  Download the app, open the index file, create a user, and click on the body image to add a new pain point, or click and existing point to edit it (extend timeframe, change details, etc).  
+                        </p>
+                        <p>
+                            I designed this as a pure HTML5 app utilising local browser storage so that it should (in theory) be able to run on any device without the need to install software.  
+                            The downside to storing data in the HTML5 local storage is that it can be easily wiped when clearing browser temporary files,  being slightly difficult to manipulate when trying to deal with database records and fields, as well as being unencrypted.
+                        </p>
+                        
+                        
+                        <h3 id="getting_started">Getting Started</h3>
+                            <h4>Download</h4>
+                            <p>First thing to do is to download the app.  If you are reading this though, chances are you have already.  
+                                The app can be downloaded from the <a href="https://github.com/doatesy/Pain-Management-Tracker">github page</a>.  Instructions should be on this page on how to do this.
+                            </p>
+                            <hr>
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <h4>First Run</h4>
+                                    <ol>
+                                        <li>Open the index.html file from your download in a modern browser</li>
+                                        <li>You should be presented with a page like the on on the right</li>
+                                        <li>Type your name in the "name" field & click "submit"</li>
+                                        <li>You should now see your name in the list of "Existing Users"</li>
+                                        <li>Click on your name.  You should be taken to the "Pain Management" page with an outline of the human body.</li>
+                                    </ol>
+                                    <i>Note : The app will remember the last user selected, and the last page you were on, and automatically load them when you open the page next time.  If you want to log out, change user, or add a new user, click the "Change User" button up the top.</i>
+                                </div>
+                                <div class="col-xs-8">
+                                    <img alt='Add User Image' class="img-responsive" src="./screenshots/frontpage-addUser.png">
+                                </div>
+                          </div>
+                            
+                            <hr>
+                          <div class="row">
+                                <div class="col-xs-4">
+                                    <h4>Logging pain/entering pain points</h4>
+                                    <ol>
+                                        <li>You can click on any part body outline to create a new entry, or to edit an existing point, just click on it.</li>
+                                        <li>You should see the "Pain Details" page like the one on the right.</li>
+                                        <li>Enter the details of the pain you are having into the fields listed.  A brief description of each field/option should be displayed.</li>
+                                        <li>You can use the preset buttons in the pain duration section.  Please note that you <strong>must</strong> use the format supplied (eg YYYY-MM-DD HH:MM:SS)</li>
+                                        <li>Notes are searchable, so you can store some additional notes/keywords in here and search for them later.</li>
+                                        <li>Once finished, click the "Save" button.  The close button will close the window <strong>without</strong> saving the pain details.</li>
+                                        <li>You should now see the human body outline with your new pain point added on it.  You can move your mouse over the top of it to see some quick details.</li>
+                                    </ol>
+                                    <i>Note : If are adding a new pain point and you realised you clicked in the wrong spot, just close the Pain Details window and click the correct spot.  The old spot will not be saved.</i>
+                                </div>
+                                <div class="col-xs-8">
+                                    <img alt='Add User Image' class="img-responsive" src="./screenshots/frontpage-add-point.png">
+                                </div>
+                          </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <ul class="nav nav-pills nav-stacked">
+                            <li><a href="#about">About</a></li>
+                            <li><a href="#getting_started">Getting Started</a></li>
+                            <li><a href="#security">Security</a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
