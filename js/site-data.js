@@ -15,7 +15,9 @@ var reports = {
         'js_generate':"reports_generate_simple",
         "filters":['all'],
         'options':{
-            fields:[{'select_fields':true}]
+            'fields':{
+                'display':"Select Fields to be included in the report",
+                'available':[]}
         }
     }
 };

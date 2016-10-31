@@ -527,16 +527,18 @@ function reports_generate_paramaters(rdata){
     }
     
     //If any options were supplied.
-    if(rdata.options.length>=1){
-        var optionsHTML = $("<div><h3>Report Options</h3></div>");
+    if(Object.keys(rdata.options).length>=1){
+        var optionsHTML = $("<div><hr><h3>Report Options</h3><form class='form-horizontal' id='report_generate_options'></form></div>");
         
         $.each(rdata.options, function(i,oD){
-            optionsHTML.append(reports_options_html(i,oD));
+            optionsHTML.find("#report_generate_options").append(reports_options_html(i,oD));
         });
+        
+        $("#reports_content").append(optionsHTML.html());
        
     }
     else{
-        $("#reports_content").append("<hr><p>No more options available for this report</p>");
+        $("#reports_content").append("<hr><p>No other options available for this report " + rdata.options.length + " </p>");
     }
     
      //add a button to the end of the filters list
@@ -635,7 +637,7 @@ function reports_filter_html(i,fD){
      }
 
      //if there is a description, add it as helper text
-      if('description' in fD){
+     if('description' in fD){
           html.find("#"+i).after( "<span id='helpblock_"+i+"' class='help-block'>"+fD.description+"</span>");
       }
       
@@ -647,18 +649,44 @@ function reports_filter_html(i,fD){
 
 function reports_options_html(i,oD){
     //create a jquery object for putting HTML into
-    var html = $("<div><hr><h3>Report Options </h3></div>");
+    var html = $("<div><div class='form-group'>"+
+        "<label for='opt_"+i+"' class='col-sm-4 col-sm-offset-2 control-label'>"+oD.display+"</label>"+
+        "<div class='col-sm-6 option-input'></div>" +
+        "</div></div>");
     
     switch (i){
-        case('select_fields'):
+        case('fields'):
             //Provide a multichekcbox to select which fields, by default select the ones that also have filter options
+            html.find(".option-input").append('<select multiple size="10" class="form-control" id="opt_'+i+'" name="opt_'+i+'"></select>');
+            var selectableFields = [];
+            
+            if(oD.available.length===0){
+                //foreach
+                $.each(db_fields, function(fi,fd){
+                    selectableFields.push(fi);
+                });
+            }
+            else{
+                selectableFields = oD.available;
+            }
+            
+            //For each selectable field
+            $.each(selectableFields,function(sI,sD){
+                html.find("#opt_"+i).append('<option value="'+sD+'">'+db_fields[sD].display+"</option>");
+                //if this is a commonly filtered 
+                if('required' in db_fields[sD]){
+                    html.find("#opt_"+i + " option:last").attr('selected','true');
+                }
+            });
+            
+            html.find("#opt_"+i).attr('size',selectableFields.length)
             
         break;
     }
     
     
     //Return the appropriate HTML
-    return html;
+    return html.html();
 }
 
 // Serializes the filter inputs and passes them to the generate report function
@@ -679,13 +707,48 @@ function reports_generate_form_submit(fID){
     });
     var filteredPoints = get_points.apply(this,filters);
     
+    //Now deal with the options
+    var optData = $("#report_generate_options").serializeArray();
+    var options = {};
+    if(optData.length>='1'){
+        $.each(optData,function(i,v){
+            if(v.name in options){
+                //check if this is already an array
+                if(options[v.name].constructor !== Array){
+                    options[v.name]=[options[v.name]];
+                }
+                options[v.name].push(v.value);
+            }
+            else options[v.name]=v.value;
+        });
+    }
+    console.log(options);
+    
     var organised_points = [];
     
     //Organise the points into consistent arrays
     var opCount = 0;
+    
+    //Start a var for storing columns
+    var columns = [];
+    
+    //If we have the option of fields, check it.
+    if('opt_fields' in options){
+        //for each of the options field, add it to the oclumns
+        $.each(options.opt_fields, function(i,f){
+            columns.push(f);
+        });
+    }
+    
+    //Else add all the fields in the DB List
+    else{
+        $.each(db_fields,function(i,d){columns.push(i);});
+    }
+    
     $.each(filteredPoints, function(i,p){
         organised_points[opCount] = {};
-        $.each(['pain_level','pain_location','pain_type','notes','time_start','time_end','position_x','position_y','id'],function(k,v){
+        $.each(columns,function(k,v){
+            
             if(v in p){
                 organised_points[opCount][v]=p[v];
             }
