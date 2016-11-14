@@ -35,21 +35,23 @@ $( document ).ready(function() {
 });
 
 function firstStart(){
-     
-        var html_imports = [
-            "./content/page_main.html",
-            "./content/page_front.html",
-            "./content/page_settings.html",
-            "./content/page_reports.html",
-            "./content/page_docs.html",
-            "./content/alert_point_data.html"
-        ];
-        //Get imported content
-        $.when.apply(null,html_imports.map(function(url){
-            return $.get(url,function(res){
-                $("#page_template_wrap").append(res);
-            });
-        })).then(function(){
+//          
+//          
+//        Removed content import to allow the html5 to work without non-supported js requests for fil:///
+//        var html_imports = [
+//            "./content/page_main.html",
+//            "./content/page_front.html",
+//            "./content/page_settings.html",
+//            "./content/page_reports.html",
+//            "./content/page_docs.html",
+//            "./content/alert_point_data.html"
+//        ];
+//        //Get imported content
+//        $.when.apply(null,html_imports.map(function(url){
+//            return $.get(url,function(res){
+//                $("#page_template_wrap").append(res);
+//            });
+//        })).then(function(){
             //Once all content imported.
             var thisUser =  get_current_user();
             if(thisUser===null){
@@ -59,7 +61,7 @@ function firstStart(){
                 if(cPage!==undefined)loadPage(cPage);
                 else loadPage("main");
             }
-        });
+//        });
 
     }
 
