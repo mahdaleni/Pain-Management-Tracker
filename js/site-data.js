@@ -108,6 +108,13 @@ var pages = {
                 'menu':'left',
                 "needs_login":true
             }, 
+            'med':{
+                'name':"Medication",
+                'div_id':'page_wrap_med',
+                'js_run':function(){start_med_page();},
+                'menu':'left',
+                "needs_login":true
+            }, 
             'reports':{
                 'name':"Reports",
                 'div_id':'page_wrap_reports',

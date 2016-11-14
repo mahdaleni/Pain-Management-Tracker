@@ -481,6 +481,16 @@ function main_set_time_fields(startTimeStamp, endTimeStamp){
 }
 
 
+// =========== Supplements/Medication Page Functions ===========
+function start_med_page(){
+    med_show_available();
+}
+
+
+function med_show_available(){
+    
+}
+
 // =========== Reports Page Functions ===========
 function start_reports_page(){
     reports_show_available();
