@@ -150,6 +150,8 @@ function start_front_page(){
     
 }
 
+
+// =========== Data functions, used for routing between different data sources ==========
 function get_users(){
     return db_local_get_users();
 }
@@ -210,6 +212,16 @@ function get_point_data(pid){
 
 function save_point(point){
     db_local_save_point(point);
+}
+
+// Get med/supplements
+function get_meds(){
+   return db_local_get_meds();
+}
+
+// Get med/supplements
+function get_med(med){
+   return db_local_get_meds(med);
 }
 
 
@@ -484,10 +496,36 @@ function main_set_time_fields(startTimeStamp, endTimeStamp){
 // =========== Supplements/Medication Page Functions ===========
 function start_med_page(){
     med_show_available();
+    med_show_inuse();
 }
 
 
 function med_show_available(){
+    //Empty the list
+    $("#med_list_ul").html("");
+    
+    var meds = get_meds();
+    if(meds.length<1){
+        $("#med_list_ul").html("No supplements / Medications found, please add one using the 'add' button above")
+    }
+    $.each(meds,function(i,m){
+        $("#med_list_ul").append(
+                '<li><a href="#" onclick="med_add_instance(\''+i+'\')"><strong>'+m.name+'</strong><br><i>'+m.description+'</i></a></li>');
+        
+    });
+}
+
+function med_show_inuse(){
+    
+}
+
+//Adds a new medication/supplement to the list of availabe
+function med_add_new(){
+    
+}
+
+//Adds the med to the user as an "in use" med.
+function med_add_instance(id){
     
 }
 
@@ -893,6 +931,10 @@ function pad(pad, str, padLeft) {
   }
 }
 
+
+
+
+// =========== DB Local Functions ===========
     
 function db_local_get_points(pain_type, pain_location, pain_level, startTime, endTime, notesContain){
     
@@ -1117,4 +1159,17 @@ function db_local_add_user(user){
          return "<p>The name must be <strong>at least 4 characters long</strong> to be added.</p>";
           
     }
+}
+
+
+function db_local_get_meds(med){
+    
+    var thisUser =  JSON.parse(localStorage.getItem("user"));
+    
+    
+    var meds = JSON.parse(localStorage.getItem(thisUser.name + "_med"));
+    if (meds===null)return {};
+    else return meds;
+    
+   
 }
