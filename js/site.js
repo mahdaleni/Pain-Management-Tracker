@@ -505,8 +505,11 @@ function med_show_available(){
     $("#med_list_ul").html("");
     
     var meds = get_meds();
-    if(meds.length<1){
+    if(Object.keys(meds).length<1){
         $("#med_list_ul").html("No supplements / Medications found, please add one using the 'add' button above")
+    }
+    else{
+       
     }
     $.each(meds,function(i,m){
         $("#med_list_ul").append(
@@ -517,6 +520,11 @@ function med_show_available(){
 
 function med_show_inuse(){
     
+}
+
+function med_show_add_new_modal(){
+    
+    load_modal("Add New Medication / Supplement", "page_wrap_med_model_add");
 }
 
 //Adds a new medication/supplement to the list of availabe

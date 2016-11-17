@@ -379,11 +379,7 @@
                         <div class="col-sm-6">
                             <h3 class="text-center">List of Medications</h3>
                             <hr>
-                            <p><a href="#">Add</a></p>
-                            
-                     
-
-                            
+                            <p><a href="#" onclick="med_show_add_new_modal()">Add</a></p>
                             <p class="text-muted">To add a med/supplement you are currently on, just click on it in the lower box</p>
                             
                             <ul class="" id="med_list_ul">
@@ -400,7 +396,56 @@
 
                 </div>
                 
-                
+                  
+            <!-- Main - Point data entry modal -->
+                <div id="page_wrap_med_model_add" class="hidden">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <form class="form-horizontal" id="form_med_add">
+                                <div class="form-group">
+                                  <label for="med_name" class="col-sm-3 control-label">Name</label>
+                                  <div class="col-sm-9">
+                                    <input type="text" id="med_name" name="med_name"  aria-describedby="med_name_helpblock" class="form-control">
+                                    <span id="med_name_helpblock" class="help-block">Medication name, eg thyroxine</span>
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label for="med_measurement" class="col-sm-3 control-label">Measurement</label>
+                                  <div class="col-sm-9">
+                                      <div class="row">
+                                          <div class="col-xs-6">
+                                            <input type="number" id="med_measurement" name="med_measurement" step="any" aria-describedby="med_name_helpblock" class="form-control">
+                                          </div>
+                                          <div class="col-xs-6">
+                                            <select id="med_unit" name="med_unit"  aria-describedby="med_measurement_helpblock" class="form-control">
+                                                <option>Front</option><option>Back</option><option>Side</option>
+                                            </select>
+                                          </div>
+                                      </div>
+                                     
+                                    <span id="med_measurement_helpblock" class="help-block">Is the pain on the front of your body, the back, or on the side?</span>
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label for="med_type" class="col-sm-3 control-label">Type</label>
+                                  <div class="col-sm-9">
+                                      <select id="med_type" name="med_type"  aria-describedby="med_type_helpblock" class="form-control">
+                                        <option>Prescription Medication</option><option>Off the shelf Medication</option><option>Supplement</option>
+                                    </select>
+                                    <span id="med_type_helpblock" class="help-block">Is it a Supplement (Vitamins), Prescription or off the shelf medication?</span>
+                                  </div>
+                                </div>
+                              
+                                <div class="form-group">
+                                  <div class="col-sm-12">
+                                    <div class="btn btn-info btn-block btn-lg" onclick="med_add_new()">Save</div>
+                                  </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
                 
                 
                 
