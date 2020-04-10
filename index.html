@@ -6,7 +6,7 @@
 -->
 <html>
 	<head>
-		<title>Pain Tracker</title>
+		<title>CoMedis</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
                 
@@ -43,7 +43,7 @@
             <div class="container-fluid">
                 <div class="row">
                      <div class="col-xs-10 col-xs-offset-1 text-center">
-                        <h1> Pain Management Tracker</h1>
+                        <h1> Corona - Medis</h1>
                      </div>
                 </div>
                 
@@ -52,7 +52,7 @@
                          <nav class="navbar navbar-inverse">
                             <div class="container-fluid">
                               <div class="navbar-header">
-                                <a class="navbar-brand" href="#">Pain Tracker</a>
+                                <a class="navbar-brand" href="#">C0 Medis</a>
                               </div>
                               <ul id="div_menu_left" class="nav navbar-nav">
                                
@@ -98,7 +98,7 @@
 
                             <form class="form-horizontal">
                                 <div class="form-group">
-                                  <label for="pain_level" class="col-sm-3 control-label">Pain Level</label>
+                                  <label for="pain_level" class="col-sm-3 control-label">tingkat Nyeri</label>
                                   <div class="col-sm-9">
                                       <select id="pain_level" name="pain_level"  aria-describedby="pain_level_helpblock" class="form-control">
                                         <option>1</option><option>2</option><option>3</option>
@@ -106,55 +106,55 @@
                                         <option>7</option><option>8</option><option>9</option>
                                         <option>10</option>
                                     </select>
-                                    <span id="pain_level_helpblock" class="help-block">Please rate the level of pain in this area from 1 - 10, with 1 being the least amount, and 10 being the most amount of pain.</span>
+                                    <span id="pain_level_helpblock" class="help-block">Silakan nilai tingkat rasa sakit di daerah ini dari 1 - 10, dengan 1 sebagai jumlah paling sedikit, dan 10 sebagai jumlah paling banyak rasa sakit.</span>
                                   </div>
                                 </div>
                                 <div class="form-group">
-                                  <label for="pain_location" class="col-sm-3 control-label">Pain Type</label>
+                                  <label for="pain_location" class="col-sm-3 control-label">Jenis Nyeri</label>
                                   <div class="col-sm-9">
                                       <select id="pain_type" name="pain_type"  aria-describedby="pain_type_helpblock" class="form-control">
-                                        <option>Muscle</option><option>Skin</option><option>Joint</option>
-                                        <option>Other</option>
+                                        <option>Otot</option><option>Kulit</option><option>Sendi</option>
+                                        <option>Bagian yang lain</option>
                                     </select>
-                                    <span id="pain_type_helpblock" class="help-block">Please specify where you think the pain is, Muscle, Joint, Skin, or other.</span>
+                                    <span id="pain_type_helpblock" class="help-block">Silakan tentukan di mana menurut Anda rasa sakitnya, Otot, Sendi, Kulit, atau lainnya.</span>
                                   </div>
                                 </div>
                                 <div class="form-group">
-                                  <label for="pain_location" class="col-sm-3 control-label">Pain Location</label>
+                                  <label for="pain_location" class="col-sm-3 control-label">Lokasi Nyeri/Sakit</label>
                                   <div class="col-sm-9">
                                       <select id="pain_location" name="pain_location"  aria-describedby="pain_location_helpblock" class="form-control">
-                                        <option>Front</option><option>Back</option><option>Side</option>
+                                        <option>Depan</option><option>Belakang</option><option>Samping</option>
                                     </select>
-                                    <span id="pain_location_helpblock" class="help-block">Is the pain on the front of your body, the back, or on the side?</span>
+                                    <span id="pain_location_helpblock" class="help-block">Apakah rasa sakit di bagian depan tubuh Anda, di belakang, atau di samping?</span>
                                   </div>
                                 </div>
                                   <div class="form-group">
-                                  <label for="notes" class="col-sm-3 control-label">Notes</label>
+                                  <label for="notes" class="col-sm-3 control-label">Catatan</label>
                                   <div class="col-sm-9">
                                       <input type="text" class="form-control" id="notes" name="notes">
-                                    <span id="notes_helpblock" class="help-block">Notes regarding this entry, eg:noticed weather change coming through, resting most of the day, etc.</span>
+                                    <span id="notes_helpblock" class="help-block">Catatan tentang data ini, misalnya: perubahan cuaca yang diperhatikan datang, istirahat hampir sepanjang hari, dll.</span>
                                   </div>
                                 </div>
-                                <h3 class="text-center">Pain Duration</h3>
+                                <h3 class="text-center">Lama Nyeri</h3>
                                 <hr>
                                 <div class="form-group">
                                   <div class="col-sm-11 col-sm-offset-1">
-                                      <p> <i>Preset times</i></p>
+                                      <p> <i>Waktu yang ditentukan</i></p>
                                           <div class="btn-group" role="group" aria-label="Basic example">
-                                            <button type="button" onclick="main_time_select($(this).html())" class="btn btn-info">30 Secs</button>
-                                            <button type="button" onclick="main_time_select($(this).html())" class="btn btn-info">10 Mins</button>
-                                            <button type="button" onclick="main_time_select($(this).html())" class="btn btn-info">1 Hour</button>
-                                            <button type="button" onclick="main_time_select($(this).html())" class="btn btn-info">8 Hours</button>
-                                            <button type="button" onclick="main_time_select($(this).html())" class="btn btn-info">1 Day</button>
+                                            <button type="button" onclick="main_time_select($(this).html())" class="btn btn-info">30 Detik</button>
+                                            <button type="button" onclick="main_time_select($(this).html())" class="btn btn-info">10 Menit</button>
+                                            <button type="button" onclick="main_time_select($(this).html())" class="btn btn-info">1 Jam</button>
+                                            <button type="button" onclick="main_time_select($(this).html())" class="btn btn-info">8 Jam</button>
+                                            <button type="button" onclick="main_time_select($(this).html())" class="btn btn-info">1 Hari</button>
                                           </div>
                                           <br>
                                           <br>
                                          <div class="form-group row">
-                                            <label for="time_start" class="col-sm-1 control-label">Start</label>
+                                            <label for="time_start" class="col-sm-1 control-label">Mulai</label>
                                             <div class="col-sm-5">
                                                 <input type="text" class="form-control" id="time_start" name="time_start" placeholder="">
                                             </div>
-                                            <label for="time_end" class="col-sm-1 control-label">Finish</label>
+                                            <label for="time_end" class="col-sm-1 control-label">Akhir</label>
                                             <div class="col-sm-5">
                                                 <input type="text" class="form-control" id="time_end" name="time_end" placeholder="">
                                             </div>
@@ -167,7 +167,7 @@
                                 <input type="hidden" id="id" name="id" value="new">
                                 <div class="form-group">
                                   <div class="col-sm-12">
-                                    <div class="btn btn-info btn-block btn-lg" onclick="main_point_save_data()">Save</div>
+                                    <div class="btn btn-info btn-block btn-lg" onclick="main_point_save_data()">Simpan</div>
                                   </div>
                                 </div>
                             </form>
@@ -181,20 +181,19 @@
                 
                 <!-- Documentation -->
                 <div id="page_wrap_doco" class="hidden">
-                    <h1>Documentation</h1>
+                    <h1>Dokumentasi</h1>
                     <hr>
                     <div class="row">
                         <div class="col-sm-9">
-                            <h3 id="about">About</h3>
+                            <h3 id="about">Tentang Aplikasi</h3>
                             <p>
-                                This app was intended to be a simple way for an individual to track points of pain in their body and generate reports from the data that is entered.  
-                                There was no professional assistance with the design or coding, so if you do know what you are doing and have some suggestions, I would love to hear them via the <a href="https://github.com/doatesy/Pain-Management-Tracker">github page</a>. </p>
+                                Aplikasi ini dimaksudkan untuk menjadi cara sederhana bagi seseorang untuk melacak titik-titik rasa sakit di tubuh mereka dan menghasilkan laporan dari data yang dimasukkan.
+                                 </p>
                             <p>
-                                Usage of the app should be fairly straight forward.  Download the app, open the index file, create a user, and click on the body image to add a new pain point, or click and existing point to edit it (extend timeframe, change details, etc).  
+                               Penggunaan aplikasi harus cukup mudah. Unduh aplikasi, buka file indeks, buat pengguna, dan klik pada gambar tubuh untuk menambahkan titik nyeri baru, atau klik dan titik yang ada untuk mengeditnya (memperpanjang jangka waktu, mengubah detail, dll).
                             </p>
                             <p>
-                                I designed this as a pure HTML5 app utilising local browser storage so that it should (in theory) be able to run on any device without the need to install software.  
-                                The downside to storing data in the HTML5 local storage is that it can be easily wiped when clearing browser temporary files,  being slightly difficult to manipulate when trying to deal with database records and fields, as well as being unencrypted.
+                               
                             </p>
 
 
@@ -224,17 +223,17 @@
                                 <hr>
                               <div class="row">
                                     <div class="col-sm-4">
-                                        <h4>Logging pain/entering pain points</h4>
+                                        <h4>Nyeri saat masuk / memasuki titik nyeri</h4>
                                         <ol>
-                                            <li>You can click on any part body outline to create a new entry, or to edit an existing point, just click on it.</li>
-                                            <li>You should see the "Pain Details" page like the one on the right.</li>
-                                            <li>Enter the details of the pain you are having into the fields listed.  A brief description of each field/option should be displayed.</li>
-                                            <li>You can use the preset buttons in the pain duration section.  Please note that you <strong>must</strong> use the format supplied (eg YYYY-MM-DD HH:MM:SS)</li>
-                                            <li>Notes are searchable, so you can store some additional notes/keywords in here and search for them later.</li>
-                                            <li>Once finished, click the "Save" button.  The close button will close the window <strong>without</strong> saving the pain details.</li>
-                                            <li>You should now see the human body outline with your new pain point added on it.  You can move your mouse over the top of it to see some quick details.</li>
+                                            <li>Anda dapat mengklik garis besar tubuh bagian mana saja untuk membuat entri baru, atau untuk mengedit titik yang ada, cukup klik di atasnya.</li>
+                                            <li>Anda akan melihat halaman "Rincian Sakit" seperti yang ada di kanan.</li>
+                                            <li>Masukkan detail rasa sakit yang Anda alami ke dalam bidang yang terdaftar. Deskripsi singkat dari setiap bidang / opsi harus ditampilkan.</li>
+                                            <li>Anda dapat menggunakan tombol preset di bagian durasi nyeri. Harap dicatat bahwa Anda harus menggunakan format yang disediakan</li>
+                                            <li>Catatan dapat dicari, sehingga Anda dapat menyimpan beberapa catatan / kata kunci tambahan di sini dan mencarinya nanti.</li>
+                                            <li>Setelah selesai, klik tombol "Simpan". Tombol tutup akan menutup jendela tanpa menyimpan detail rasa sakit.</li>
+                                            <li>Anda sekarang harus melihat garis tubuh manusia dengan titik nyeri baru Anda ditambahkan di atasnya. Anda dapat menggerakkan mouse Anda di atasnya untuk melihat beberapa detail cepat.</li>
                                         </ol>
-                                        <i>Note : If are adding a new pain point and you realised you clicked in the wrong spot, just close the Pain Details window and click the correct spot.  The old spot will not be saved.</i>
+                                        <i>Catatan: Jika menambahkan titik sakit baru dan Anda menyadari Anda mengklik di tempat yang salah, tutup saja jendela Rincian NYERI dan klik tempat yang benar. Tempat lama tidak akan disimpan.</i>
                                     </div>
                                     <div class="col-sm-8">
                                         <img alt='Add User Image' class="img-responsive" src="./screenshots/frontpage-add-point.png">
@@ -245,12 +244,12 @@
                                     <div class="col-sm-4">
                                         <h4>Generating Reports</h4>
                                         <p>
-                                            Reports section / page can be used to view the data that has been entered, or export it to CSV.  
-                                            If you are somewhat familiar with javascript, you can write your own functions & reports.  edit the ./js/site-data.js file to add reports into the reports array, and custom javascript can be run upon generation.  See the other reports in the array for examples on how to do this.
+                                            Menghasilkan Laporan
+                                            Bagian / halaman laporan dapat digunakan untuk melihat data yang telah dimasukkan, atau mengekspornya ke CSV.
                                         </p>
                                     </div>
                                     <div class="col-sm-8">
-                                        <img alt='Add User Image' class="img-responsive" src="./screenshots/reports-overview.png">
+                                           <img alt='Add User Image' class="img-responsive" src="./screenshots/reports-overview.png">
                                     </div>
                               </div>
                         </div>
